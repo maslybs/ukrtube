@@ -65,7 +65,9 @@ async function loadVideos({ replace }) {
     showMessage(
       message === "API_TOKEN_REQUIRED"
         ? "Додай ключ API у налаштуваннях UkrTube і онови сторінку."
-        : `Не вдалося завантажити відео: ${message}`,
+        : message === "API_TOKEN_INVALID_CHARACTERS"
+          ? "Ключ API містить недопустимий символ. Збережи його ще раз у налаштуваннях UkrTube."
+          : `Не вдалося завантажити відео: ${message}`,
       "error",
     );
   } finally {

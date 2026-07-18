@@ -51,7 +51,17 @@ async function loadSettings() {
 
 async function saveAndTest(event) {
   event.preventDefault();
-  const apiToken = tokenInput.value.trim();
+  let apiToken = "";
+  try {
+    apiToken = normalizeApiToken(tokenInput.value);
+  } catch {
+    setStatus(
+      "Ключ містить недопустимий символ. Вставте лише сам ключ без слова Bearer, лапок і прихованих пробілів.",
+      "error",
+    );
+    tokenInput.focus();
+    return;
+  }
   if (!apiToken) {
     setStatus("Введіть ключ API.", "error");
     tokenInput.focus();
@@ -61,6 +71,7 @@ async function saveAndTest(event) {
   setBusy(true);
   setStatus("Зберігаю ключ і перевіряю з’єднання…");
   try {
+    tokenInput.value = apiToken;
     await chrome.storage.local.set({
       [API_SETTINGS_KEY]: { apiToken, updatedAt: Date.now() },
     });
@@ -72,9 +83,11 @@ async function saveAndTest(event) {
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     setStatus(
-      message === "API_TOKEN_REQUIRED" || /unauthorized/i.test(message)
-        ? "Ключ не прийнято. Перевірте його та спробуйте ще раз."
-        : `Не вдалося перевірити з’єднання: ${message}`,
+      message === "API_TOKEN_INVALID_CHARACTERS"
+        ? "Ключ містить недопустимий символ. Вставте лише сам ключ без слова Bearer, лапок і прихованих пробілів."
+        : message === "API_TOKEN_REQUIRED" || /unauthorized/i.test(message)
+          ? "Ключ не прийнято. Перевірте його та спробуйте ще раз."
+          : `Не вдалося перевірити з’єднання: ${message}`,
       "error",
     );
   } finally {

@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Separate Ukrainian and English project documentation.
 - Structural and runtime contract checks.
 - An extension options page for saving, testing, and removing the API key.
+- A custom extension icon in all required Chrome sizes.
 
 ### Changed
 
@@ -28,6 +29,7 @@ All notable changes to this project will be documented in this file.
 
 - Recover channel avatars and view counts when the feed catalogue returns empty placeholder values.
 - Avoid blocking card rendering on separate YouTube requests for every random ID.
+- Normalize pasted API keys and reject hidden Unicode characters before creating request headers.
 
 ### Preserved
 

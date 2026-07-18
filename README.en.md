@@ -12,6 +12,7 @@ UkrTube is a Manifest V3 Chrome extension that adds a **UkrTube** tab with Ukrai
 - Server-side topic, keyword, and date filters across the feed catalogue.
 - One-click filter reset and visible date-range shortcuts.
 - An options page for saving and testing the API key.
+- A custom blue-and-yellow extension icon that opens settings when selected.
 - Video cards with title, channel, thumbnail, duration, views, and publication date.
 - Progressive channel-avatar and view-count recovery from public YouTube video pages.
 - Light and dark themes that follow the current YouTube page.
@@ -41,6 +42,8 @@ After a source change, use **Reload** on `chrome://extensions`, then refresh You
 
 Open **Extension options** on `chrome://extensions`, or select **API key** inside the UkrTube filter panel. The key is stored only in the current Chrome profile through `chrome.storage.local`; it is not synchronized or added to project files.
 
+When the key is saved, the extension removes a `Bearer` prefix, surrounding quotes, and extra whitespace. A hidden or unsupported character inside the key is reported before a request is sent.
+
 The feed service is fixed to `https://uatb.bgdn.dev`. A credential used by a browser extension must still be protected on the server with narrow permissions, rate limits, monitoring, expiry, and rotation.
 
 ## Project structure
@@ -50,9 +53,11 @@ The feed service is fixed to `https://uatb.bgdn.dev`. A credential used by a bro
 ├── manifest.json
 ├── src
 │   ├── background   # Feed API, YouTube metadata, offscreen bridge, messages
+│   ├── assets       # Editable source and generated extension icon sizes
 │   ├── content      # Feed state, filters, UI, controller, and styles
 │   ├── offscreen    # Experimental local AI runtime
 │   ├── options      # API key settings page
+│   ├── shared       # Shared API key validation
 │   └── config.js    # Public API origin
 ├── scripts          # Project validation
 ├── tests            # Runtime contract tests

@@ -115,7 +115,11 @@ if (manifest) {
     report(existsSync(optionsPath), `Missing options page: ${optionsPage}`);
     if (existsSync(optionsPath)) {
       const optionsHtml = readFileSync(optionsPath, "utf8");
-      for (const resource of ["index.js", "styles.css"]) {
+      for (const resource of [
+        "index.js",
+        "styles.css",
+        "../shared/api-token.js",
+      ]) {
         report(
           optionsHtml.includes(resource) &&
             existsSync(path.resolve(path.dirname(optionsPath), resource)),
@@ -124,6 +128,22 @@ if (manifest) {
       }
     }
   }
+
+  const iconPaths = new Set([
+    ...Object.values(manifest.icons || {}),
+    ...Object.values(manifest.action?.default_icon || {}),
+  ]);
+  report(iconPaths.size > 0, "manifest.json must declare extension icons.");
+  for (const iconPath of iconPaths) {
+    report(
+      existsSync(projectPath(iconPath)),
+      `Missing extension icon: ${iconPath}`,
+    );
+  }
+  report(
+    existsSync(projectPath("src/assets/icons/icon.svg")),
+    "Missing editable icon source: src/assets/icons/icon.svg",
+  );
 }
 
 const offscreenDocument = projectPath("src/offscreen/index.html");

@@ -10,16 +10,17 @@ async function getConfig() {
     const stored = await chrome.storage.local.get(API_SETTINGS_KEY);
     const saved = stored?.[API_SETTINGS_KEY];
     savedToken =
-      saved && typeof saved.apiToken === "string" ? saved.apiToken.trim() : "";
+      saved && typeof saved.apiToken === "string" ? saved.apiToken : "";
   } catch {
     // Tests and non-extension runtimes use the committed configuration fallback.
   }
 
   return {
     apiUrl: typeof config.apiUrl === "string" ? config.apiUrl.trim() : "",
-    apiToken:
+    apiToken: normalizeApiToken(
       savedToken ||
-      (typeof config.apiToken === "string" ? config.apiToken.trim() : ""),
+        (typeof config.apiToken === "string" ? config.apiToken : ""),
+    ),
   };
 }
 

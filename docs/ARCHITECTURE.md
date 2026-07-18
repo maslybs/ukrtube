@@ -58,6 +58,10 @@ These files are classic content scripts because Manifest V3 does not load declar
 - `styles.css`: responsive light and dark settings layout.
 - `index.js`: local key storage, visibility control, removal, and connection testing.
 
+## Shared modules
+
+- `api-token.js`: strips common paste wrappers and rejects characters that cannot be used safely in an authorization header.
+
 ## Configuration
 
 `src/config.js` contains the public `https://uatb.bgdn.dev` service origin. The options page stores the user's API key under `ukrtubeApiSettings` in `chrome.storage.local`. The background worker reads that key only when making service requests. It is never synchronized by the extension or written to project files.

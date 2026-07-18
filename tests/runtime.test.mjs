@@ -58,11 +58,30 @@ test("background configuration prefers the API key saved in Chrome", async () =>
       },
     },
   });
+  runFile(context, "src/shared/api-token.js");
   runFile(context, "src/background/utils.js");
 
   const config = await vm.runInContext("getConfig()", context);
   assert.equal(config.apiUrl, "https://uatb.bgdn.dev");
   assert.equal(config.apiToken, savedApiValue);
+});
+
+test("API keys are cleaned before they are added to request headers", () => {
+  const context = vm.createContext({ console });
+  runFile(context, "src/shared/api-token.js");
+
+  assert.equal(
+    vm.runInContext("normalizeApiToken(' Bearer “value-123” ')", context),
+    "value-123",
+  );
+  assert.equal(
+    vm.runInContext("normalizeApiToken('\"value-456\"')", context),
+    "value-456",
+  );
+  assert.throws(
+    () => vm.runInContext("normalizeApiToken('value\\u200b789')", context),
+    /API_TOKEN_INVALID_CHARACTERS/,
+  );
 });
 
 test("options page loads, saves, tests, and removes the API key", async () => {
@@ -137,11 +156,12 @@ test("options page loads, saves, tests, and removes the API key", async () => {
     },
   });
 
+  runFile(context, "src/shared/api-token.js");
   runFile(context, "src/options/index.js");
   await new Promise((resolve) => setImmediate(resolve));
   assert.equal(tokenInput.value, existingApiValue);
 
-  tokenInput.value = newApiValue;
+  tokenInput.value = `Bearer “${newApiValue}”`;
   await form.listeners.get("submit")({ preventDefault() {} });
   assert.equal(savedValue.ukrtubeApiSettings.apiToken, newApiValue);
   assert.equal(testedMessage.type, "TEST_API_CONNECTION");
@@ -433,6 +453,7 @@ test("feed API requests complete filtered pages from /feed", async () => {
     },
   });
 
+  runFile(context, "src/shared/api-token.js");
   runFile(context, "src/background/utils.js");
   runFile(context, "src/background/feed-api.js");
   vm.runInContext(
