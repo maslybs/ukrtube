@@ -148,6 +148,31 @@ report(
   "The project directory must be named ukrtube.",
 );
 
+const feedApiSource = readFileSync(
+  projectPath("src/background/feed-api.js"),
+  "utf8",
+);
+const controllerSource = readFileSync(
+  projectPath("src/content/controller.js"),
+  "utf8",
+);
+const viewSource = readFileSync(projectPath("src/content/view.js"), "utf8");
+report(
+  controllerSource.includes('type: "GET_RANDOM_VIDEO_IDS"') &&
+    feedApiSource.includes('url.pathname = "/random"'),
+  "The main feed must request random video IDs.",
+);
+report(
+  !feedApiSource.includes('pathname = "/feed"') &&
+    !controllerSource.includes("GET_FILTERED_FEED"),
+  "The main feed must not fall back to the deterministic /feed endpoint.",
+);
+report(
+  !viewSource.includes("Показано") &&
+    !viewSource.includes('data-role="count-label"'),
+  "The feed toolbar must not show a video-count label.",
+);
+
 for (const readme of ["README.md", "README.uk.md"]) {
   const file = projectPath(readme);
   report(

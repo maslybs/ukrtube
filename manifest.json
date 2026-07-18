@@ -3,7 +3,7 @@
   "name": "UkrTube",
   "short_name": "UkrTube",
   "version": "1.3.0",
-  "description": "Додає нескінченну українську стрічку YouTube із серверними фільтрами за датою, темами та ключовими словами.",
+  "description": "Додає випадкову українську стрічку YouTube з фільтрами за датою, темами та ключовими словами.",
   "permissions": ["storage", "offscreen"],
   "host_permissions": [
     "https://youtube-id-collector.bgdn.workers.dev/*",

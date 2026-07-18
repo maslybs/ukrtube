@@ -200,19 +200,22 @@ test("content enrichment updates every card in a returned batch", async () => {
   assert.equal(renderCount, 1);
 });
 
-test("feed API keeps the existing server-side filter contract", async () => {
-  let requestedUrl = "";
+test("feed API requests a fresh random selection from /random", async () => {
+  const requestedUrls = [];
+  let requestNumber = 0;
   const context = vm.createContext({
     URL,
     console,
     fetch: async (url) => {
-      requestedUrl = String(url);
+      requestedUrls.push(String(url));
+      requestNumber += 1;
       return {
         ok: true,
         json: async () => ({
-          items: [{ id: "dQw4w9WgXcQ", title: "Test" }],
-          nextCursor: "next-page",
-          hasMore: true,
+          ids:
+            requestNumber === 1
+              ? ["dQw4w9WgXcQ", "aqz-KE-bpKQ"]
+              : ["M7lc1UVf-VE", "jNQXAC9IVRw"],
         }),
       };
     },
@@ -221,38 +224,23 @@ test("feed API keeps the existing server-side filter contract", async () => {
   runFile(context, "src/background/utils.js");
   runFile(context, "src/background/feed-api.js");
   vm.runInContext(
-    "globalThis.EXTENSION_CONFIG = { apiUrl: 'https://example.test/random', apiToken: 'token' }",
+    "globalThis.EXTENSION_CONFIG = { apiUrl: 'https://example.test/feed?stale=1', apiToken: 'token' }",
     context,
   );
 
-  const result = await vm.runInContext(
-    `getFilteredFeed({
-      count: 30,
-      cursor: "cursor-1",
-      filters: {
-        categoryModes: { news: "include", sports: "exclude" },
-        includeKeywords: "історія",
-        excludeKeywords: "футбол",
-        datePreset: "week",
-        dateFrom: "2026-01-01",
-        dateTo: "2026-01-31"
-      }
-    })`,
-    context,
-  );
+  const first = await vm.runInContext("getRandomVideoIds(2)", context);
+  const second = await vm.runInContext("getRandomVideoIds(2)", context);
 
-  const url = new URL(requestedUrl);
-  assert.equal(url.pathname, "/feed");
-  assert.equal(url.searchParams.get("count"), "30");
-  assert.equal(url.searchParams.get("cursor"), "cursor-1");
-  assert.equal(url.searchParams.get("include_topics"), "news");
-  assert.equal(url.searchParams.get("exclude_topics"), "sports");
-  assert.equal(url.searchParams.get("include_keywords"), "історія");
-  assert.equal(url.searchParams.get("exclude_keywords"), "футбол");
-  assert.equal(url.searchParams.get("date_preset"), "week");
-  assert.equal(result.videos.length, 1);
-  assert.equal(result.nextCursor, "next-page");
-  assert.equal(result.hasMore, true);
+  assert.deepEqual([...first], ["dQw4w9WgXcQ", "aqz-KE-bpKQ"]);
+  assert.deepEqual([...second], ["M7lc1UVf-VE", "jNQXAC9IVRw"]);
+  assert.notDeepEqual([...first], [...second]);
+  assert.equal(requestedUrls.length, 2);
+  for (const requestedUrl of requestedUrls) {
+    const url = new URL(requestedUrl);
+    assert.equal(url.pathname, "/random");
+    assert.equal(url.searchParams.get("count"), "2");
+    assert.equal(url.searchParams.has("stale"), false);
+  }
 });
 
 test("background service worker loads every module and registers messaging", async () => {

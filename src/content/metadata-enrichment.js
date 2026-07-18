@@ -3,7 +3,9 @@
 const METADATA_ENRICHMENT_BATCH_SIZE = 6;
 
 function needsVideoMetadataEnrichment(video) {
-  return !video?.avatarUrl || !(Number(video?.viewCount) > 0);
+  const hasViewCount =
+    video?.viewCountAvailable === true || Number(video?.viewCount) > 0;
+  return !video?.avatarUrl || !hasViewCount;
 }
 
 function applyVideoMetadataEnrichment(video, enrichment) {

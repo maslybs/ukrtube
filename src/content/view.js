@@ -11,11 +11,6 @@ function createSection() {
   const toolbar = document.createElement("div");
   toolbar.className = "ukrtube-toolbar";
 
-  const label = document.createElement("div");
-  label.className = "ukrtube-toolbar-label";
-  label.dataset.role = "count-label";
-  label.textContent = "UkrTube";
-
   const actions = document.createElement("div");
   actions.className = "ukrtube-toolbar-actions";
 
@@ -41,7 +36,7 @@ function createSection() {
   refreshButton.addEventListener("click", () => loadVideos({ replace: true }));
 
   actions.append(filterButton, refreshButton);
-  toolbar.append(label, actions);
+  toolbar.appendChild(actions);
 
   const filterPanel = createFilterPanel();
   const grid = document.createElement("div");
@@ -85,23 +80,9 @@ function updateAiStatus() {
   if (status) status.textContent = state.aiStatus;
 }
 
-function updateToolbar(visibleCount = null) {
+function updateToolbar() {
   const section = document.getElementById(SECTION_ID);
   if (!section) return;
-
-  const visible = visibleCount == null ? filteredVideos().length : visibleCount;
-  const countLabel = section.querySelector('[data-role="count-label"]');
-  if (countLabel) {
-    if (state.pendingMetadata > 0) {
-      countLabel.textContent = state.videos.length
-        ? `Показано ${state.videos.length}; завантажується наступна порція`
-        : "Завантаження стрічки UkrTube…";
-    } else {
-      countLabel.textContent = state.videos.length
-        ? `Показано ${state.videos.length} відео`
-        : "UkrTube";
-    }
-  }
 
   const filterButton = section.querySelector('[data-role="filter-button"]');
   if (filterButton) {
@@ -254,7 +235,7 @@ function passesLocalFilters(video) {
 }
 
 function filteredVideos() {
-  return [...state.videos];
+  return state.videos.filter(passesLocalFilters);
 }
 
 function formatViews(viewCount, available = Number(viewCount) > 0) {
@@ -469,7 +450,8 @@ function renderVideos() {
   const videos = filteredVideos();
   grid.textContent = "";
   for (const video of videos) grid.appendChild(createVideoCard(video));
-  for (let index = 0; index < state.pendingMetadata; index += 1) {
+  const skeletonCount = Math.min(state.pendingMetadata, 12);
+  for (let index = 0; index < skeletonCount; index += 1) {
     grid.appendChild(createSkeletonCard());
   }
 
@@ -481,7 +463,7 @@ function renderVideos() {
   } else {
     showMessage("");
   }
-  updateToolbar(videos.length);
+  updateToolbar();
 }
 
 function renderProgressiveVideo(video) {
@@ -502,5 +484,5 @@ function renderProgressiveVideo(video) {
     else grid.appendChild(card);
   }
 
-  updateToolbar(filteredVideos().length);
+  updateToolbar();
 }

@@ -2,16 +2,6 @@
 
 async function handleMessage(message) {
   switch (message?.type) {
-    case "GET_FILTERED_FEED":
-      return {
-        ok: true,
-        ...(await getFilteredFeed({
-          count: message.count,
-          cursor: message.cursor,
-          filters: message.filters || {},
-        })),
-      };
-
     case "GET_RANDOM_VIDEO_IDS":
       return { ok: true, ids: await getRandomVideoIds(message.count) };
 
@@ -21,6 +11,14 @@ async function handleMessage(message) {
         return { ok: false, error: "INVALID_VIDEO_ID" };
       }
       return { ok: true, video: await fetchVideoMetadata(id) };
+    }
+
+    case "GET_VIDEO_METADATA_BATCH": {
+      const ids = normalizeIds({ ids: message.ids }).slice(0, 12);
+      return {
+        ok: true,
+        videos: await mapWithConcurrency(ids, 6, fetchVideoMetadata),
+      };
     }
 
     case "ENRICH_VIDEO_METADATA":

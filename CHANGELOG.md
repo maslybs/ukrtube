@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Server-side topic, keyword, and publication-date filters.
-- Cursor-based infinite scrolling.
+- Topic, keyword, and publication-date filters.
+- Infinite scrolling without duplicates in the current feed.
 - Separate Ukrainian and English project documentation.
 - Structural and runtime contract checks.
 
@@ -16,13 +16,16 @@ All notable changes to this project will be documented in this file.
 - Renamed the extension to UkrTube and aligned all internal identifiers.
 - Split the background worker, content runtime, offscreen AI runtime, and styles into focused modules.
 - Moved local API credentials to an ignored override file.
+- Changed the main feed to request a fresh selection from `/random`.
+- Removed the video-count label above the feed while keeping the action buttons on the right.
 
 ### Fixed
 
 - Recover channel avatars and view counts when the feed catalogue returns empty placeholder values.
+- Prevent deterministic `/feed` results from being reused after a page reload.
 
 ### Preserved
 
-- Existing feed messages and server query parameters.
+- The configured `/random` service contract.
 - Current YouTube card rendering and filter settings.
 - Hidden experimental local AI behavior.

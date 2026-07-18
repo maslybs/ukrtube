@@ -260,12 +260,8 @@
   #ukrtube-section {
     padding-inline: 16px;
   }
-  .ukrtube-toolbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
   .ukrtube-toolbar-actions {
-    justify-content: flex-start;
+    justify-content: flex-end;
   }
   .ukrtube-filter-fields {
     grid-template-columns: 1fr;
