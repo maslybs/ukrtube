@@ -2,6 +2,16 @@
 
 async function handleMessage(message) {
   switch (message?.type) {
+    case "GET_FILTERED_FEED":
+      return {
+        ok: true,
+        ...(await getFilteredFeed({
+          count: message.count,
+          cursor: message.cursor,
+          filters: message.filters || {},
+        })),
+      };
+
     case "GET_RANDOM_VIDEO_IDS":
       return { ok: true, ids: await getRandomVideoIds(message.count) };
 

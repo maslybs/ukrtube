@@ -16,18 +16,18 @@ All notable changes to this project will be documented in this file.
 - Renamed the extension to UkrTube and aligned all internal identifiers.
 - Split the background worker, content runtime, offscreen AI runtime, and styles into focused modules.
 - Moved local API credentials to an ignored override file.
-- Changed the main feed to request a fresh selection from `/random`.
+- Changed the main feed to request complete random selections from `/feed`.
 - Removed the video-count label above the feed while keeping the action buttons on the right.
 - Added one-click filter reset and visible publication-date shortcuts.
-- Clarified that keyword filters search the loaded video metadata locally.
+- Send keyword filters to the feed service and document the searched fields.
 
 ### Fixed
 
 - Recover channel avatars and view counts when the feed catalogue returns empty placeholder values.
-- Prevent deterministic `/feed` results from being reused after a page reload.
+- Avoid blocking card rendering on separate YouTube requests for every random ID.
 
 ### Preserved
 
-- The configured `/random` service contract.
+- The configured `/feed` service contract and cursor paging.
 - Current YouTube card rendering and filter settings.
 - Hidden experimental local AI behavior.

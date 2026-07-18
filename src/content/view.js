@@ -235,7 +235,7 @@ function passesLocalFilters(video) {
 }
 
 function filteredVideos() {
-  return state.videos.filter(passesLocalFilters);
+  return [...state.videos];
 }
 
 function formatViews(viewCount, available = Number(viewCount) > 0) {

@@ -108,7 +108,7 @@ function createFilterPanel() {
   const textHelp = document.createElement("div");
   textHelp.className = "ukrtube-keyword-help";
   textHelp.textContent =
-    "Слова перевіряються у назві, каналі, описі й ключових словах завантажених відео.";
+    "Слова надсилаються до служби й перевіряються у назві, каналі, описі та ключових словах.";
   textGrid.appendChild(textHelp);
 
   const includeLabel = document.createElement("label");

@@ -250,6 +250,7 @@ const state = {
   videos: [],
   videoIds: new Set(),
   pendingMetadata: 0,
+  cursor: null,
   hasMore: true,
   filters: createDefaultFilters(),
   aiResults: new Map(),

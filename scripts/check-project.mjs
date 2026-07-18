@@ -158,14 +158,9 @@ const controllerSource = readFileSync(
 );
 const viewSource = readFileSync(projectPath("src/content/view.js"), "utf8");
 report(
-  controllerSource.includes('type: "GET_RANDOM_VIDEO_IDS"') &&
-    feedApiSource.includes('url.pathname = "/random"'),
-  "The main feed must request random video IDs.",
-);
-report(
-  !feedApiSource.includes('pathname = "/feed"') &&
-    !controllerSource.includes("GET_FILTERED_FEED"),
-  "The main feed must not fall back to the deterministic /feed endpoint.",
+  controllerSource.includes('type: "GET_FILTERED_FEED"') &&
+    feedApiSource.includes('url.pathname = "/feed"'),
+  "The main feed must request complete cards from /feed.",
 );
 report(
   !viewSource.includes("Показано") &&

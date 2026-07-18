@@ -11,6 +11,7 @@ async function loadVideos({ replace }) {
     state.videos = [];
     state.videoIds.clear();
     state.aiResults.clear();
+    state.cursor = null;
     state.hasMore = true;
     state.aiGeneration += 1;
     state.metadataGeneration += 1;
@@ -21,60 +22,40 @@ async function loadVideos({ replace }) {
   renderVideos();
 
   try {
-    const idResponse = await sendMessage({
-      type: "GET_RANDOM_VIDEO_IDS",
-      count: replace ? PAGE_SIZE : PAGE_SIZE * 2,
+    const response = await sendMessage({
+      type: "GET_FILTERED_FEED",
+      count: PAGE_SIZE,
+      cursor: replace ? null : state.cursor,
+      filters: state.filters,
     });
     if (!state.active || generation !== state.loadGeneration) return;
-    if (!idResponse?.ok) {
-      throw new Error(idResponse?.error || "Невідома помилка API");
+    if (!response?.ok) {
+      throw new Error(response?.error || "Невідома помилка API");
     }
 
-    const ids = (Array.isArray(idResponse.ids) ? idResponse.ids : [])
-      .filter((id) => /^[A-Za-z0-9_-]{11}$/.test(id || ""))
-      .filter((id) => !state.videoIds.has(id))
-      .slice(0, PAGE_SIZE);
+    const videos = (Array.isArray(response.videos) ? response.videos : [])
+      .filter((video) => /^[A-Za-z0-9_-]{11}$/.test(video?.id || ""))
+      .filter((video) => !state.videoIds.has(video.id));
 
-    if (!ids.length) {
-      throw new Error("Випадкова добірка не містить нових відео.");
+    for (const video of videos) {
+      state.videoIds.add(video.id);
+      state.videos.push(video);
     }
 
-    state.pendingMetadata = ids.length;
+    state.cursor = response.nextCursor || null;
+    state.hasMore = Boolean(response.hasMore && response.nextCursor);
+    state.pendingMetadata = 0;
     renderVideos();
+    void enrichVideoCards(videos, state.metadataGeneration);
 
-    for (let offset = 0; offset < ids.length; offset += 6) {
-      const batchIds = ids.slice(offset, offset + 6);
-      const metadataResponse = await sendMessage({
-        type: "GET_VIDEO_METADATA_BATCH",
-        ids: batchIds,
-      });
-      if (!state.active || generation !== state.loadGeneration) return;
-      if (!metadataResponse?.ok) {
-        throw new Error(
-          metadataResponse?.error || "Не вдалося отримати дані відео.",
-        );
-      }
-
-      const videos = (
-        Array.isArray(metadataResponse.videos) ? metadataResponse.videos : []
-      )
-        .filter((video) => /^[A-Za-z0-9_-]{11}$/.test(video?.id || ""))
-        .filter((video) => !state.videoIds.has(video.id));
-
-      for (const video of videos) {
-        state.videoIds.add(video.id);
-        state.videos.push(video);
-      }
-
-      state.pendingMetadata = Math.max(
-        0,
-        state.pendingMetadata - batchIds.length,
+    if (!videos.length) {
+      showMessage(
+        replace
+          ? "У базі поки немає відео, які відповідають цим фільтрам. Зміни період, слова або теми."
+          : "За цими фільтрами більше відео немає.",
+        "empty",
       );
-      renderVideos();
-      void enrichVideoCards(videos, state.metadataGeneration);
     }
-
-    state.hasMore = true;
   } catch (error) {
     if (!state.active || generation !== state.loadGeneration) return;
     state.pendingMetadata = 0;

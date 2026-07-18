@@ -292,7 +292,7 @@ test("content enrichment updates every card in a returned batch", async () => {
   assert.equal(renderCount, 1);
 });
 
-test("feed API requests a fresh random selection from /random", async () => {
+test("feed API requests complete filtered pages from /feed", async () => {
   const requestedUrls = [];
   let requestNumber = 0;
   const context = vm.createContext({
@@ -304,10 +304,18 @@ test("feed API requests a fresh random selection from /random", async () => {
       return {
         ok: true,
         json: async () => ({
-          ids:
+          items:
             requestNumber === 1
-              ? ["dQw4w9WgXcQ", "aqz-KE-bpKQ"]
-              : ["M7lc1UVf-VE", "jNQXAC9IVRw"],
+              ? [
+                  { id: "dQw4w9WgXcQ", title: "Історія України" },
+                  { id: "aqz-KE-bpKQ", title: "Українська культура" },
+                ]
+              : [
+                  { id: "M7lc1UVf-VE", title: "Нова добірка" },
+                  { id: "jNQXAC9IVRw", title: "Інше відео" },
+                ],
+          nextCursor: `cursor-${requestNumber}`,
+          hasMore: true,
         }),
       };
     },
@@ -316,23 +324,54 @@ test("feed API requests a fresh random selection from /random", async () => {
   runFile(context, "src/background/utils.js");
   runFile(context, "src/background/feed-api.js");
   vm.runInContext(
-    "globalThis.EXTENSION_CONFIG = { apiUrl: 'https://example.test/feed?stale=1', apiToken: 'token' }",
+    "globalThis.EXTENSION_CONFIG = { apiUrl: 'https://example.test/random?stale=1', apiToken: 'token' }",
     context,
   );
 
-  const first = await vm.runInContext("getRandomVideoIds(2)", context);
-  const second = await vm.runInContext("getRandomVideoIds(2)", context);
+  const first = await vm.runInContext(
+    `getFilteredFeed({
+      count: 2,
+      cursor: "page-1",
+      filters: {
+        categoryModes: { news: "include", sports: "exclude" },
+        includeKeywords: "історія",
+        excludeKeywords: "футбол",
+        datePreset: "week",
+        dateFrom: "2026-01-01",
+        dateTo: "2026-01-31"
+      }
+    })`,
+    context,
+  );
+  const second = await vm.runInContext(
+    "getFilteredFeed({ count: 2, cursor: null, filters: {} })",
+    context,
+  );
 
-  assert.deepEqual([...first], ["dQw4w9WgXcQ", "aqz-KE-bpKQ"]);
-  assert.deepEqual([...second], ["M7lc1UVf-VE", "jNQXAC9IVRw"]);
-  assert.notDeepEqual([...first], [...second]);
+  assert.deepEqual(
+    first.videos.map((video) => video.id),
+    ["dQw4w9WgXcQ", "aqz-KE-bpKQ"],
+  );
+  assert.deepEqual(
+    second.videos.map((video) => video.id),
+    ["M7lc1UVf-VE", "jNQXAC9IVRw"],
+  );
+  assert.equal(first.nextCursor, "cursor-1");
+  assert.equal(first.hasMore, true);
   assert.equal(requestedUrls.length, 2);
-  for (const requestedUrl of requestedUrls) {
-    const url = new URL(requestedUrl);
-    assert.equal(url.pathname, "/random");
-    assert.equal(url.searchParams.get("count"), "2");
-    assert.equal(url.searchParams.has("stale"), false);
-  }
+  const firstUrl = new URL(requestedUrls[0]);
+  assert.equal(firstUrl.pathname, "/feed");
+  assert.equal(firstUrl.searchParams.get("count"), "2");
+  assert.equal(firstUrl.searchParams.get("cursor"), "page-1");
+  assert.equal(firstUrl.searchParams.get("include_topics"), "news");
+  assert.equal(firstUrl.searchParams.get("exclude_topics"), "sports");
+  assert.equal(firstUrl.searchParams.get("include_keywords"), "історія");
+  assert.equal(firstUrl.searchParams.get("exclude_keywords"), "футбол");
+  assert.equal(firstUrl.searchParams.get("date_preset"), "week");
+  assert.equal(firstUrl.searchParams.get("date_from"), "2026-01-01");
+  assert.equal(firstUrl.searchParams.get("date_to"), "2026-01-31");
+  assert.equal(firstUrl.searchParams.has("stale"), false);
+  assert.equal(new URL(requestedUrls[1]).pathname, "/feed");
 });
 
 test("background service worker loads every module and registers messaging", async () => {

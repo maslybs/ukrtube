@@ -2,14 +2,14 @@
 
 [Українська версія](README.uk.md)
 
-UkrTube is a Manifest V3 Chrome extension that adds a **UkrTube** tab with Ukrainian videos to the YouTube home page. It requests a fresh random selection from the `/random` endpoint and lets the user filter the loaded videos by topic, keywords, and publication date.
+UkrTube is a Manifest V3 Chrome extension that adds a **UkrTube** tab with Ukrainian videos to the YouTube home page. It requests complete random selections from the `/feed` endpoint and lets the user filter videos by topic, keywords, and publication date.
 
 ## Features
 
 - A native-looking **UkrTube** tab on the YouTube home page.
 - A fresh random selection after page reload or the **Refresh** button.
 - Infinite loading of random batches without duplicates in the current feed.
-- Local topic, keyword, and date filters for the loaded selection.
+- Server-side topic, keyword, and date filters across the feed catalogue.
 - One-click filter reset and visible date-range shortcuts.
 - Video cards with title, channel, thumbnail, duration, views, and publication date.
 - Progressive channel-avatar and view-count recovery from public YouTube video pages.
@@ -43,7 +43,7 @@ The committed `src/config.js` contains public defaults and a placeholder token. 
 
 ```js
 globalThis.EXTENSION_CONFIG = {
-  apiUrl: "https://your-service.example/random",
+  apiUrl: "https://your-service.example",
   apiToken: "YOUR_TOKEN",
 };
 ```
@@ -96,7 +96,7 @@ npm run format
 - `storage` stores filter settings in Chrome Sync.
 - `offscreen` hosts the optional local AI runtime.
 - Host access to YouTube reads public video pages and thumbnails.
-- Host access to the feed service loads random video IDs.
+- Host access to the feed service loads complete filtered video pages.
 
 The extension does not inject scripts into arbitrary websites. Its content scripts run only on `https://www.youtube.com/*`.
 
