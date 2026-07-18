@@ -1,10 +1,25 @@
 "use strict";
 
-function getConfig() {
+const API_SETTINGS_KEY = "ukrtubeApiSettings";
+
+async function getConfig() {
   const config = globalThis.EXTENSION_CONFIG || {};
+  let savedToken = "";
+
+  try {
+    const stored = await chrome.storage.local.get(API_SETTINGS_KEY);
+    const saved = stored?.[API_SETTINGS_KEY];
+    savedToken =
+      saved && typeof saved.apiToken === "string" ? saved.apiToken.trim() : "";
+  } catch {
+    // Tests and non-extension runtimes use the committed configuration fallback.
+  }
+
   return {
     apiUrl: typeof config.apiUrl === "string" ? config.apiUrl.trim() : "",
-    apiToken: typeof config.apiToken === "string" ? config.apiToken.trim() : "",
+    apiToken:
+      savedToken ||
+      (typeof config.apiToken === "string" ? config.apiToken.trim() : ""),
   };
 }
 

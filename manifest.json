@@ -3,15 +3,19 @@
   "name": "UkrTube",
   "short_name": "UkrTube",
   "version": "1.3.0",
-  "description": "Додає випадкову українську стрічку YouTube з фільтрами за датою, темами та ключовими словами.",
+  "description": "Додає на YouTube швидку випадкову стрічку українських відео з фільтрами.",
   "permissions": ["storage", "offscreen"],
   "host_permissions": [
-    "https://youtube-id-collector.bgdn.workers.dev/*",
+    "https://uatb.bgdn.dev/*",
     "https://www.youtube.com/*",
     "https://i.ytimg.com/*"
   ],
   "background": {
     "service_worker": "src/background/service-worker.js"
+  },
+  "options_ui": {
+    "page": "src/options/index.html",
+    "open_in_tab": true
   },
   "content_scripts": [
     {

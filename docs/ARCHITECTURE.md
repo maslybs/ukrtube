@@ -2,11 +2,12 @@
 
 ## Runtime overview
 
-The extension has three isolated runtime areas:
+The extension has four isolated runtime areas:
 
 1. **Content runtime** adds the Ukrainian tab, owns feed state, renders cards, and sends typed messages.
 2. **Background worker** calls the feed service, reads public YouTube metadata for legacy message handlers, and controls the offscreen document.
 3. **Offscreen runtime** contains the experimental local language and classification model.
+4. **Options runtime** stores the API key locally and asks the background worker to test it.
 
 The normal version 1.3.0 path is:
 
@@ -51,9 +52,15 @@ These files are classic content scripts because Manifest V3 does not load declar
 - `classifier.js`: prompt construction and normalized results.
 - `messaging.js`: offscreen message contract and status reporting.
 
+## Options modules
+
+- `index.html`: Ukrainian settings form and accessible status area.
+- `styles.css`: responsive light and dark settings layout.
+- `index.js`: local key storage, visibility control, removal, and connection testing.
+
 ## Configuration
 
-`src/config.js` is safe to commit and contains a placeholder token. `src/config.local.js` overrides it on a developer machine and is ignored by Git. The override preserves local operation without publishing a credential.
+`src/config.js` contains the public `https://uatb.bgdn.dev` service origin. The options page stores the user's API key under `ukrtubeApiSettings` in `chrome.storage.local`. The background worker reads that key only when making service requests. It is never synchronized by the extension or written to project files.
 
 ## Compatibility guardrails
 

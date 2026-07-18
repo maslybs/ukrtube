@@ -2,7 +2,7 @@
 
 async function getRandomVideoIds(count) {
   const safeCount = Math.min(Math.max(Number(count) || 30, 1), 60);
-  const { apiUrl, apiToken } = getConfig();
+  const { apiUrl, apiToken } = await getConfig();
 
   if (!apiUrl || !apiToken || apiToken === "PASTE_API_TOKEN_HERE") {
     throw new Error("API_TOKEN_REQUIRED");
@@ -57,7 +57,7 @@ function normalizedFilterModes(filters) {
 
 async function getFilteredFeed({ count, cursor, filters }) {
   const safeCount = Math.min(Math.max(Number(count) || 30, 1), 60);
-  const { apiUrl, apiToken } = getConfig();
+  const { apiUrl, apiToken } = await getConfig();
   if (!apiUrl || !apiToken || apiToken === "PASTE_API_TOKEN_HERE") {
     throw new Error("API_TOKEN_REQUIRED");
   }

@@ -1,113 +1,106 @@
 # UkrTube
 
-[Українська версія](README.uk.md)
+[English version](README.en.md)
 
-UkrTube is a Manifest V3 Chrome extension that adds a **UkrTube** tab with Ukrainian videos to the YouTube home page. It requests complete random selections from the `/feed` endpoint and lets the user filter videos by topic, keywords, and publication date.
+UkrTube — це розширення Chrome на основі Manifest V3. Воно додає вкладку **UkrTube** з українськими відео на головну сторінку YouTube. Розширення отримує готові випадкові добірки через `/feed` і дає змогу фільтрувати відео за темами, словами й датою.
 
-## Features
+## Можливості
 
-- A native-looking **UkrTube** tab on the YouTube home page.
-- A fresh random selection after page reload or the **Refresh** button.
-- Infinite loading of random batches without duplicates in the current feed.
-- Server-side topic, keyword, and date filters across the feed catalogue.
-- One-click filter reset and visible date-range shortcuts.
-- Video cards with title, channel, thumbnail, duration, views, and publication date.
-- Progressive channel-avatar and view-count recovery from public YouTube video pages.
-- Light and dark themes that follow the current YouTube page.
-- Filter settings stored with Chrome Sync.
-- An experimental local Chrome AI runtime kept behind a disabled feature flag.
-- No build step: Chrome loads the source files directly.
+- Вкладка **UkrTube** на головній сторінці YouTube.
+- Нова випадкова добірка після оновлення сторінки або натискання кнопки **«Оновити»**.
+- Нескінченне завантаження випадкових добірок без повторів у поточній стрічці.
+- Серверні фільтри за темами, словами й датою для всього каталогу стрічки.
+- Скидання всіх фільтрів однією кнопкою та швидкий вибір періоду.
+- Сторінка налаштувань для збереження й перевірки ключа API.
+- Картки з назвою, каналом, зображенням, тривалістю, переглядами й датою.
+- Поступове отримання аватара каналу й переглядів з відкритих сторінок YouTube.
+- Світла й темна тема відповідно до сторінки YouTube.
+- Збереження фільтрів у Chrome Sync.
+- Дослідна локальна модель Chrome, яка зараз прихована й не запускається.
+- Розширення працює прямо з початкових файлів, окреме збирання не потрібне.
 
-## Requirements
+## Що потрібно
 
-- Google Chrome or another Chromium browser with Manifest V3 support.
-- Access to the configured feed service.
-- A valid API token for that service.
-- Node.js 20 or newer only when running the development checks.
+- Google Chrome або інший браузер Chromium з підтримкою Manifest V3.
+- Доступ до служби стрічки.
+- Чинний ключ доступу до цієї служби.
+- Node.js 20 або новіший лише для перевірок під час розробки.
 
-## Install for local development
+## Встановлення для розробки
 
-1. Clone or download this repository.
-2. Copy `src/config.js` to `src/config.local.js`.
-3. Put your API token in `src/config.local.js`. This file is ignored by Git.
-4. Open `chrome://extensions`.
-5. Enable **Developer mode**.
-6. Select **Load unpacked** and choose the repository directory.
-7. Open the YouTube home page and select the **UkrTube** tab.
+1. Завантажте цей проєкт.
+2. Відкрийте `chrome://extensions`.
+3. Увімкніть режим розробника.
+4. Натисніть **«Завантажити розпаковане»** та виберіть папку проєкту.
+5. Відкрийте налаштування розширення, додайте ключ API та натисніть **«Зберегти й перевірити»**.
+6. Відкрийте головну сторінку YouTube і натисніть **UkrTube**.
 
-After a source change, use **Reload** on `chrome://extensions`, then refresh YouTube with `Ctrl + Shift + R` or `Cmd + Shift + R`.
+Після зміни коду натисніть **«Перезавантажити»** на `chrome://extensions`, а потім оновіть YouTube через `Ctrl + Shift + R` або `Cmd + Shift + R`.
 
-## Configuration
+## Налаштування
 
-The committed `src/config.js` contains public defaults and a placeholder token. Local credentials belong in `src/config.local.js`:
+Відкрийте **«Параметри розширення»** на `chrome://extensions` або натисніть **«Ключ API»** у вікні фільтрів UkrTube. Ключ зберігається лише в поточному профілі Chrome через `chrome.storage.local`. Він не синхронізується з іншими пристроями й не додається до файлів проєкту.
 
-```js
-globalThis.EXTENSION_CONFIG = {
-  apiUrl: "https://your-service.example",
-  apiToken: "YOUR_TOKEN",
-};
-```
+Розширення використовує службу `https://uatb.bgdn.dev`. Ключ у браузерному розширенні не можна вважати повністю таємним, тому на сервері для нього потрібні вузькі права, обмеження кількості запитів, строк дії, спостереження та заміна за потреби.
 
-The background service loads the public file first and then applies the optional local override. Never commit a real credential. A token shipped inside any browser extension must be treated as a public client credential and protected on the server with narrow permissions, rate limits, monitoring, and rotation.
-
-## Project structure
+## Будова проєкту
 
 ```text
 .
 ├── manifest.json
 ├── src
-│   ├── background   # Feed API, YouTube metadata, offscreen bridge, messages
-│   ├── content      # Feed state, filters, UI, controller, and styles
-│   ├── offscreen    # Experimental local AI runtime
-│   ├── config.js
-│   └── config.local.js  # Local only; ignored by Git
-├── scripts          # Project validation
-├── tests            # Runtime contract tests
-└── docs             # Architecture notes
+│   ├── background   # запити до служби, дані YouTube та обмін повідомленнями
+│   ├── content      # стан стрічки, фільтри, вигляд, керування та стилі
+│   ├── offscreen    # дослідна локальна модель
+│   ├── options      # сторінка налаштування ключа API
+│   └── config.js    # відкрита адреса служби
+├── scripts          # перевірка будови проєкту
+├── tests            # перевірки головних правил роботи
+└── docs             # опис будови
 ```
 
-The order of JavaScript files in `manifest.json` is intentional. Chrome content scripts share one isolated extension world, so foundational state and helpers load before the controller starts.
+Порядок файлів у `manifest.json` важливий. Chrome запускає частини коду в одному окремому середовищі розширення. Спочатку завантажуються стан і допоміжні частини, а вже потім головне керування.
 
-See [Architecture](docs/ARCHITECTURE.md) for the module responsibilities and runtime flow.
+Докладніше це описано у файлі [Architecture](docs/ARCHITECTURE.md).
 
-## Development
+## Перевірки під час розробки
 
-Install the formatting dependency once:
+Один раз установіть засіб для вирівнювання коду:
 
 ```bash
 npm install
 ```
 
-Run all structural and runtime checks:
+Запустіть усі перевірки:
 
 ```bash
 npm run check
 ```
 
-Check formatting or apply it:
+Перевірте або виправте оформлення:
 
 ```bash
 npm run format:check
 npm run format
 ```
 
-## Permissions
+## Дозволи
 
-- `storage` stores filter settings in Chrome Sync.
-- `offscreen` hosts the optional local AI runtime.
-- Host access to YouTube reads public video pages and thumbnails.
-- Host access to the feed service loads complete filtered video pages.
+- `storage` зберігає фільтри у Chrome Sync, а ключ API — лише локально.
+- `offscreen` потрібен для дослідної локальної моделі.
+- Доступ до YouTube потрібен для відкритих сторінок відео та зображень.
+- Доступ до служби стрічки потрібен для отримання готових сторінок відео з урахуванням фільтрів.
 
-The extension does not inject scripts into arbitrary websites. Its content scripts run only on `https://www.youtube.com/*`.
+Код розширення запускається лише на `https://www.youtube.com/*`.
 
-## Experimental local AI
+## Дослідна локальна модель
 
-The local AI controls are intentionally hidden in version 1.3.0 (`SHOW_AI_CONTROLS` is `false`). The offscreen runtime remains in the repository for future experiments and is not started during the normal feed flow.
+У версії 1.3.0 її елементи керування приховані: `SHOW_AI_CONTROLS` має значення `false`. Код збережено для майбутніх дослідів, але під час звичайної роботи стрічки він не запускається.
 
-## Contributing and security
+## Участь і безпека
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. Report security issues using the private process described in [SECURITY.md](SECURITY.md), not through a public issue.
+Перед змінами прочитайте [CONTRIBUTING.md](CONTRIBUTING.md). Про проблеми безпеки повідомляйте приватно за правилами з [SECURITY.md](SECURITY.md), а не у відкритому обговоренні.
 
-## License
+## Ліцензія
 
-Released under the [MIT License](LICENSE).
+Проєкт поширюється за умовами [MIT License](LICENSE).

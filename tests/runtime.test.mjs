@@ -40,6 +40,118 @@ test("background helpers preserve normalization and duration behavior", () => {
   assert.equal(vm.runInContext("formatDuration(3661)", context), "1:01:01");
 });
 
+test("background configuration prefers the API key saved in Chrome", async () => {
+  const savedApiValue = "unit-test-saved-value";
+  const context = vm.createContext({
+    URL,
+    console,
+    EXTENSION_CONFIG: {
+      apiUrl: "https://uatb.bgdn.dev",
+    },
+    chrome: {
+      storage: {
+        local: {
+          get: async (key) => ({
+            [key]: { apiToken: ` ${savedApiValue} ` },
+          }),
+        },
+      },
+    },
+  });
+  runFile(context, "src/background/utils.js");
+
+  const config = await vm.runInContext("getConfig()", context);
+  assert.equal(config.apiUrl, "https://uatb.bgdn.dev");
+  assert.equal(config.apiToken, savedApiValue);
+});
+
+test("options page loads, saves, tests, and removes the API key", async () => {
+  const existingApiValue = "unit-test-existing-value";
+  const newApiValue = "unit-test-new-value";
+  function element() {
+    const listeners = new Map();
+    return {
+      listeners,
+      className: "",
+      disabled: false,
+      textContent: "",
+      type: "button",
+      value: "",
+      addEventListener(name, listener) {
+        listeners.set(name, listener);
+      },
+      focus() {},
+      setAttribute() {},
+    };
+  }
+
+  const form = element();
+  const tokenInput = element();
+  tokenInput.type = "password";
+  const visibilityButton = element();
+  const removeButton = element();
+  const submitButton = element();
+  const statusMessage = element();
+  const statusDot = element();
+  form.querySelectorAll = () => [visibilityButton, removeButton, submitButton];
+
+  let savedValue = null;
+  let removedKey = "";
+  let testedMessage = null;
+  const context = vm.createContext({
+    console,
+    Date,
+    document: {
+      getElementById: () => tokenInput,
+      querySelector(selector) {
+        return {
+          '[data-role="api-form"]': form,
+          '[data-role="toggle-visibility"]': visibilityButton,
+          '[data-role="remove-token"]': removeButton,
+          '[data-role="status"]': statusMessage,
+          '[data-role="connection-dot"]': statusDot,
+        }[selector];
+      },
+    },
+    chrome: {
+      runtime: {
+        lastError: null,
+        sendMessage(message, callback) {
+          testedMessage = message;
+          callback({ ok: true, count: 1 });
+        },
+      },
+      storage: {
+        local: {
+          get: async (key) => ({
+            [key]: { apiToken: existingApiValue },
+          }),
+          set: async (value) => {
+            savedValue = value;
+          },
+          remove: async (key) => {
+            removedKey = key;
+          },
+        },
+      },
+    },
+  });
+
+  runFile(context, "src/options/index.js");
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(tokenInput.value, existingApiValue);
+
+  tokenInput.value = newApiValue;
+  await form.listeners.get("submit")({ preventDefault() {} });
+  assert.equal(savedValue.ukrtubeApiSettings.apiToken, newApiValue);
+  assert.equal(testedMessage.type, "TEST_API_CONNECTION");
+  assert.match(statusMessage.textContent, /з’єднання.+працює/i);
+
+  await removeButton.listeners.get("click")();
+  assert.equal(removedKey, "ukrtubeApiSettings");
+  assert.equal(tokenInput.value, "");
+});
+
 test("YouTube metadata provides a real avatar and an available view count", async () => {
   const playerResponse = {
     videoDetails: {
@@ -376,6 +488,8 @@ test("feed API requests complete filtered pages from /feed", async () => {
 
 test("background service worker loads every module and registers messaging", async () => {
   let listener = null;
+  let feedRequest = null;
+  const backgroundApiValue = "unit-test-background-value";
   const cachedVideoId = "dQw4w9WgXcQ";
   const cachedEnrichment = {
     id: cachedVideoId,
@@ -387,7 +501,17 @@ test("background service worker loads every module and registers messaging", asy
   const context = vm.createContext({
     URL,
     console,
-    fetch: async () => ({ ok: true, json: async () => ({ items: [] }) }),
+    fetch: async (url, options) => {
+      feedRequest = { url: String(url), options };
+      return {
+        ok: true,
+        json: async () => ({
+          items: [{ id: cachedVideoId, title: "Перевірка" }],
+          nextCursor: null,
+          hasMore: false,
+        }),
+      };
+    },
     chrome: {
       runtime: {
         getURL: (value) => `chrome-extension://test/${value}`,
@@ -405,9 +529,10 @@ test("background service worker loads every module and registers messaging", asy
       },
       storage: {
         local: {
-          get: async (key) => ({
-            [key]: { [cachedVideoId]: cachedEnrichment },
-          }),
+          get: async (key) =>
+            key === "ukrtubeApiSettings"
+              ? { [key]: { apiToken: backgroundApiValue } }
+              : { [key]: { [cachedVideoId]: cachedEnrichment } },
           set: async () => undefined,
         },
       },
@@ -451,6 +576,18 @@ test("background service worker loads every module and registers messaging", asy
   assert.equal(
     enriched.items[0].avatarUrl,
     "https://yt3.ggpht.com/cached-avatar",
+  );
+
+  const connection = await new Promise((resolve) => {
+    listener({ type: "TEST_API_CONNECTION" }, {}, resolve);
+  });
+  assert.equal(connection.ok, true);
+  assert.equal(connection.count, 1);
+  assert.equal(new URL(feedRequest.url).hostname, "uatb.bgdn.dev");
+  assert.equal(new URL(feedRequest.url).pathname, "/feed");
+  assert.equal(
+    feedRequest.options.headers.Authorization,
+    `Bearer ${backgroundApiValue}`,
   );
 });
 

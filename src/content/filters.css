@@ -29,6 +29,14 @@
   color: var(--ukr-primary) !important;
 }
 
+.ukrtube-filter-actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .ukrtube-reset-button {
   flex: 0 0 auto;
   min-height: 32px;
@@ -240,5 +248,9 @@ html[dark] .ukrtube-topic-chip[data-mode="exclude"],
 @media (max-width: 540px) {
   .ukrtube-filter-header {
     align-items: flex-start;
+  }
+
+  .ukrtube-filter-actions {
+    flex-direction: column;
   }
 }

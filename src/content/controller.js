@@ -64,7 +64,7 @@ async function loadVideos({ replace }) {
     const message = error instanceof Error ? error.message : String(error);
     showMessage(
       message === "API_TOKEN_REQUIRED"
-        ? "Перевір apiToken у src/config.local.js і перезавантаж розширення."
+        ? "Додай ключ API у налаштуваннях UkrTube і онови сторінку."
         : `Не вдалося завантажити відео: ${message}`,
       "error",
     );

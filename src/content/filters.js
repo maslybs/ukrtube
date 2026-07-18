@@ -87,7 +87,20 @@ function createFilterPanel() {
   resetButton.disabled = activeFilterCount() === 0;
   resetButton.addEventListener("click", resetFilters);
 
-  panelHeader.append(help, resetButton);
+  const apiButton = createButton(
+    "ukrtube-reset-button",
+    "Ключ API",
+    "Відкрити налаштування ключа API",
+  );
+  apiButton.addEventListener("click", () => {
+    chrome.runtime.openOptionsPage();
+  });
+
+  const headerActions = document.createElement("div");
+  headerActions.className = "ukrtube-filter-actions";
+  headerActions.append(apiButton, resetButton);
+
+  panelHeader.append(help, headerActions);
   panel.appendChild(panelHeader);
 
   const categories = document.createElement("div");

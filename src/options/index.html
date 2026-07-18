@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Налаштування UkrTube</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="settings-card">
+      <header>
+        <div class="brand">UkrTube</div>
+        <h1>Налаштування</h1>
+        <p>
+          Додайте ключ API для завантаження української стрічки. Ключ
+          зберігається лише у цьому профілі Chrome.
+        </p>
+      </header>
+
+      <section aria-labelledby="api-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="api-title">Доступ до API</h2>
+            <p class="domain">uatb.bgdn.dev</p>
+          </div>
+          <span class="status-dot" data-role="connection-dot"></span>
+        </div>
+
+        <form data-role="api-form">
+          <label for="api-token">Ключ API</label>
+          <div class="token-field">
+            <input
+              id="api-token"
+              name="api-token"
+              type="password"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Вставте ключ API"
+              required
+            />
+            <button
+              class="visibility-button"
+              type="button"
+              data-role="toggle-visibility"
+              aria-label="Показати ключ"
+            >
+              Показати
+            </button>
+          </div>
+
+          <p class="hint">
+            Ключ не синхронізується з іншими пристроями та не додається до
+            файлів розширення.
+          </p>
+
+          <div class="actions">
+            <button class="primary-button" type="submit">
+              Зберегти й перевірити
+            </button>
+            <button
+              class="secondary-button"
+              type="button"
+              data-role="remove-token"
+            >
+              Видалити ключ
+            </button>
+          </div>
+        </form>
+
+        <p class="status-message" data-role="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <script src="index.js"></script>
+  </body>
+</html>

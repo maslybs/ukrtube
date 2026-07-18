@@ -55,6 +55,16 @@ if (manifest) {
     manifest.version === "1.3.0",
     "manifest.json and package.json versions must match.",
   );
+  report(
+    manifest.host_permissions?.includes("https://uatb.bgdn.dev/*"),
+    "manifest.json must allow the uatb.bgdn.dev API origin.",
+  );
+  report(
+    !manifest.host_permissions?.some((value) =>
+      value.includes("youtube-id-collector.bgdn.workers.dev"),
+    ),
+    "manifest.json must not retain the retired API origin.",
+  );
 
   const serviceWorker = manifest.background?.service_worker;
   report(
@@ -95,6 +105,23 @@ if (manifest) {
         existsSync(projectPath(relativePath)),
         `Missing manifest resource: ${relativePath}`,
       );
+    }
+  }
+
+  const optionsPage = manifest.options_ui?.page;
+  report(Boolean(optionsPage), "manifest.json must declare an options page.");
+  if (optionsPage) {
+    const optionsPath = projectPath(optionsPage);
+    report(existsSync(optionsPath), `Missing options page: ${optionsPage}`);
+    if (existsSync(optionsPath)) {
+      const optionsHtml = readFileSync(optionsPath, "utf8");
+      for (const resource of ["index.js", "styles.css"]) {
+        report(
+          optionsHtml.includes(resource) &&
+            existsSync(path.resolve(path.dirname(optionsPath), resource)),
+          `Missing options resource: ${resource}`,
+        );
+      }
     }
   }
 }
@@ -157,6 +184,7 @@ const controllerSource = readFileSync(
   "utf8",
 );
 const viewSource = readFileSync(projectPath("src/content/view.js"), "utf8");
+const optionsSource = readFileSync(projectPath("src/options/index.js"), "utf8");
 report(
   controllerSource.includes('type: "GET_FILTERED_FEED"') &&
     feedApiSource.includes('url.pathname = "/feed"'),
@@ -167,14 +195,37 @@ report(
     !viewSource.includes('data-role="count-label"'),
   "The feed toolbar must not show a video-count label.",
 );
+report(
+  optionsSource.includes("chrome.storage.local") &&
+    optionsSource.includes("TEST_API_CONNECTION"),
+  "The options page must save the API key locally and test the connection.",
+);
 
-for (const readme of ["README.md", "README.uk.md"]) {
+for (const readme of ["README.md", "README.en.md"]) {
   const file = projectPath(readme);
   report(
     existsSync(file) && statSync(file).size > 500,
     `${readme} is missing or incomplete.`,
   );
 }
+const primaryReadme = readFileSync(projectPath("README.md"), "utf8");
+const englishReadme = readFileSync(projectPath("README.en.md"), "utf8");
+report(
+  primaryReadme.includes("## Можливості") &&
+    primaryReadme.includes("README.en.md"),
+  "README.md must be the primary Ukrainian documentation.",
+);
+report(
+  englishReadme.includes("## Features") && englishReadme.includes("README.md"),
+  "README.en.md must contain the English documentation.",
+);
+
+const publicConfig = readFileSync(projectPath("src/config.js"), "utf8");
+report(
+  publicConfig.includes("https://uatb.bgdn.dev") &&
+    !publicConfig.includes("youtube-id-collector.bgdn.workers.dev"),
+  "src/config.js must use the uatb.bgdn.dev API origin.",
+);
 
 const gitignore = existsSync(projectPath(".gitignore"))
   ? readFileSync(projectPath(".gitignore"), "utf8")

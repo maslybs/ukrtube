@@ -10,12 +10,15 @@ All notable changes to this project will be documented in this file.
 - Infinite scrolling without duplicates in the current feed.
 - Separate Ukrainian and English project documentation.
 - Structural and runtime contract checks.
+- An extension options page for saving, testing, and removing the API key.
 
 ### Changed
 
 - Renamed the extension to UkrTube and aligned all internal identifiers.
 - Split the background worker, content runtime, offscreen AI runtime, and styles into focused modules.
-- Moved local API credentials to an ignored override file.
+- Store the API key locally in the current Chrome profile.
+- Changed the feed service origin to `https://uatb.bgdn.dev`.
+- Made the Ukrainian README the primary project page.
 - Changed the main feed to request complete random selections from `/feed`.
 - Removed the video-count label above the feed while keeping the action buttons on the right.
 - Added one-click filter reset and visible publication-date shortcuts.

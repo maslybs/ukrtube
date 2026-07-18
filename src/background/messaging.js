@@ -12,6 +12,15 @@ async function handleMessage(message) {
         })),
       };
 
+    case "TEST_API_CONNECTION": {
+      const result = await getFilteredFeed({
+        count: 1,
+        cursor: null,
+        filters: {},
+      });
+      return { ok: true, count: result.videos.length };
+    }
+
     case "GET_RANDOM_VIDEO_IDS":
       return { ok: true, ids: await getRandomVideoIds(message.count) };
 
