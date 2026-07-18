@@ -12,6 +12,12 @@ function activeFilterCount() {
   );
 }
 
+function resetFilters() {
+  state.filters = createDefaultFilters();
+  state.aiResults.clear();
+  onFiltersChanged();
+}
+
 // Filter controls.
 
 function buildAiRule() {
@@ -64,11 +70,25 @@ function createFilterPanel() {
   panel.className = "ukrtube-filter-panel";
   panel.hidden = !state.filtersOpen;
 
+  const panelHeader = document.createElement("div");
+  panelHeader.className = "ukrtube-filter-header";
+
   const help = document.createElement("div");
   help.className = "ukrtube-filter-help";
   help.innerHTML =
     "Натискай тему: <b>показувати</b> → <b>не показувати</b> → нейтрально.";
-  panel.appendChild(help);
+
+  const resetButton = createButton(
+    "ukrtube-reset-button",
+    "Скинути",
+    "Скинути всі фільтри",
+  );
+  resetButton.dataset.role = "reset-filters";
+  resetButton.disabled = activeFilterCount() === 0;
+  resetButton.addEventListener("click", resetFilters);
+
+  panelHeader.append(help, resetButton);
+  panel.appendChild(panelHeader);
 
   const categories = document.createElement("div");
   categories.className = "ukrtube-category-list";
@@ -85,10 +105,17 @@ function createFilterPanel() {
   const textGrid = document.createElement("div");
   textGrid.className = "ukrtube-filter-fields";
 
+  const textHelp = document.createElement("div");
+  textHelp.className = "ukrtube-keyword-help";
+  textHelp.textContent =
+    "Слова перевіряються у назві, каналі, описі й ключових словах завантажених відео.";
+  textGrid.appendChild(textHelp);
+
   const includeLabel = document.createElement("label");
   includeLabel.innerHTML = "<span>Показувати, якщо є слова</span>";
   const includeInput = document.createElement("input");
   includeInput.type = "text";
+  includeInput.dataset.role = "include-keywords";
   includeInput.placeholder = "наприклад: технології, історія";
   includeInput.value = state.filters.includeKeywords;
   includeInput.addEventListener("input", () => {
@@ -101,6 +128,7 @@ function createFilterPanel() {
   excludeLabel.innerHTML = "<span>Не показувати, якщо є слова</span>";
   const excludeInput = document.createElement("input");
   excludeInput.type = "text";
+  excludeInput.dataset.role = "exclude-keywords";
   excludeInput.placeholder = "наприклад: політика, футбол";
   excludeInput.value = state.filters.excludeKeywords;
   excludeInput.addEventListener("input", () => {
@@ -118,25 +146,45 @@ function createFilterPanel() {
   dateTitle.className = "ukrtube-date-title";
   dateTitle.textContent = "Дата публікації";
 
+  const presetList = document.createElement("div");
+  presetList.className = "ukrtube-date-presets";
+  presetList.setAttribute("role", "group");
+  presetList.setAttribute("aria-label", "Період публікації");
+  for (const preset of DATE_PRESETS) {
+    const button = createButton("ukrtube-date-preset", preset.label);
+    button.dataset.datePreset = preset.value;
+    button.setAttribute(
+      "aria-pressed",
+      state.filters.datePreset === preset.value ? "true" : "false",
+    );
+    button.classList.toggle(
+      "is-active",
+      state.filters.datePreset === preset.value,
+    );
+    button.addEventListener("click", () => {
+      state.filters.datePreset = preset.value;
+      syncCustomDateInputs();
+      onFiltersChanged();
+      if (preset.value === "custom") {
+        try {
+          fromInput.showPicker?.();
+        } catch {
+          fromInput.focus();
+        }
+      }
+    });
+    presetList.appendChild(button);
+  }
+
   const dateControls = document.createElement("div");
   dateControls.className = "ukrtube-date-controls";
-
-  const presetLabel = document.createElement("label");
-  presetLabel.innerHTML = "<span>Період</span>";
-  const presetSelect = document.createElement("select");
-  for (const preset of DATE_PRESETS) {
-    const option = document.createElement("option");
-    option.value = preset.value;
-    option.textContent = preset.label;
-    presetSelect.appendChild(option);
-  }
-  presetSelect.value = state.filters.datePreset || "any";
-  presetLabel.appendChild(presetSelect);
 
   const fromLabel = document.createElement("label");
   fromLabel.innerHTML = "<span>Від</span>";
   const fromInput = document.createElement("input");
   fromInput.type = "date";
+  fromInput.lang = "uk";
+  fromInput.dataset.role = "date-from";
   fromInput.value = state.filters.dateFrom || "";
   fromLabel.appendChild(fromInput);
 
@@ -144,40 +192,47 @@ function createFilterPanel() {
   toLabel.innerHTML = "<span>До</span>";
   const toInput = document.createElement("input");
   toInput.type = "date";
+  toInput.lang = "uk";
+  toInput.dataset.role = "date-to";
   toInput.value = state.filters.dateTo || "";
   toLabel.appendChild(toInput);
 
   function syncCustomDateInputs() {
-    const custom = presetSelect.value === "custom";
-    fromInput.disabled = !custom;
-    toInput.disabled = !custom;
+    const custom = state.filters.datePreset === "custom";
+    dateControls.hidden = !custom;
     dateBox.classList.toggle("is-custom", custom);
+    fromInput.max = state.filters.dateTo || "";
+    toInput.min = state.filters.dateFrom || "";
   }
-
-  presetSelect.addEventListener("change", () => {
-    state.filters.datePreset = presetSelect.value;
-    syncCustomDateInputs();
-    onFiltersChanged(false);
-  });
 
   fromInput.addEventListener("change", () => {
     state.filters.dateFrom = fromInput.value;
     state.filters.datePreset = "custom";
-    presetSelect.value = "custom";
+    if (state.filters.dateTo && state.filters.dateFrom > state.filters.dateTo) {
+      state.filters.dateTo = state.filters.dateFrom;
+      toInput.value = state.filters.dateTo;
+    }
     syncCustomDateInputs();
-    onFiltersChanged(false);
+    onFiltersChanged();
   });
 
   toInput.addEventListener("change", () => {
     state.filters.dateTo = toInput.value;
     state.filters.datePreset = "custom";
-    presetSelect.value = "custom";
+    if (
+      state.filters.dateFrom &&
+      state.filters.dateTo &&
+      state.filters.dateTo < state.filters.dateFrom
+    ) {
+      state.filters.dateFrom = state.filters.dateTo;
+      fromInput.value = state.filters.dateFrom;
+    }
     syncCustomDateInputs();
-    onFiltersChanged(false);
+    onFiltersChanged();
   });
 
-  dateControls.append(presetLabel, fromLabel, toLabel);
-  dateBox.append(dateTitle, dateControls);
+  dateControls.append(fromLabel, toLabel);
+  dateBox.append(dateTitle, presetList, dateControls);
   panel.appendChild(dateBox);
   syncCustomDateInputs();
 

@@ -1,17 +1,49 @@
 "use strict";
 
-function refreshFilterChipStates() {
+function refreshFilterControls() {
   const section = document.getElementById(SECTION_ID);
   if (!section) return;
+
   for (const chip of section.querySelectorAll(".ukrtube-topic-chip")) {
     chip.dataset.mode = categoryMode(chip.dataset.categoryId);
   }
+
+  const includeInput = section.querySelector('[data-role="include-keywords"]');
+  if (includeInput) includeInput.value = state.filters.includeKeywords;
+
+  const excludeInput = section.querySelector('[data-role="exclude-keywords"]');
+  if (excludeInput) excludeInput.value = state.filters.excludeKeywords;
+
+  for (const button of section.querySelectorAll(".ukrtube-date-preset")) {
+    const active = button.dataset.datePreset === state.filters.datePreset;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  }
+
+  const dateControls = section.querySelector(".ukrtube-date-controls");
+  const customDate = state.filters.datePreset === "custom";
+  if (dateControls) dateControls.hidden = !customDate;
+
+  const fromInput = section.querySelector('[data-role="date-from"]');
+  const toInput = section.querySelector('[data-role="date-to"]');
+  if (fromInput) {
+    fromInput.value = state.filters.dateFrom;
+    fromInput.max = state.filters.dateTo || "";
+  }
+  if (toInput) {
+    toInput.value = state.filters.dateTo;
+    toInput.min = state.filters.dateFrom || "";
+  }
+
+  const resetButton = section.querySelector('[data-role="reset-filters"]');
+  if (resetButton) resetButton.disabled = activeFilterCount() === 0;
 }
 
 let filterReloadTimer = null;
 function onFiltersChanged() {
   saveFilters();
-  refreshFilterChipStates();
+  refreshFilterControls();
+  updateToolbar();
   state.loadGeneration += 1;
   state.metadataGeneration += 1;
   state.loading = false;

@@ -94,7 +94,7 @@ async function loadStoredFilters() {
         .catch(() => {});
     }
   } catch {
-    state.filters = { ...DEFAULT_FILTERS, categoryModes: {} };
+    state.filters = createDefaultFilters();
   }
   state.initialized = true;
 }

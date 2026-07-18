@@ -217,14 +217,14 @@ const CATEGORIES = [
 ];
 
 const DATE_PRESETS = [
-  { value: "any", label: "Будь-яка дата" },
-  { value: "day", label: "За останні 24 години" },
-  { value: "week", label: "За останні 7 днів" },
-  { value: "month", label: "За останні 30 днів" },
-  { value: "three-months", label: "За останні 3 місяці" },
-  { value: "year", label: "За останній рік" },
-  { value: "older-year", label: "Старіші одного року" },
-  { value: "custom", label: "Власний період" },
+  { value: "any", label: "Будь-коли" },
+  { value: "day", label: "24 години" },
+  { value: "week", label: "7 днів" },
+  { value: "month", label: "30 днів" },
+  { value: "three-months", label: "3 місяці" },
+  { value: "year", label: "Рік" },
+  { value: "older-year", label: "Старіші" },
+  { value: "custom", label: "Свій період" },
 ];
 
 const DEFAULT_FILTERS = Object.freeze({
@@ -238,6 +238,10 @@ const DEFAULT_FILTERS = Object.freeze({
   aiRule: "",
 });
 
+function createDefaultFilters() {
+  return { ...DEFAULT_FILTERS, categoryModes: {} };
+}
+
 const state = {
   active: false,
   loading: false,
@@ -247,7 +251,7 @@ const state = {
   videoIds: new Set(),
   pendingMetadata: 0,
   hasMore: true,
-  filters: { ...DEFAULT_FILTERS, categoryModes: {} },
+  filters: createDefaultFilters(),
   aiResults: new Map(),
   aiProcessing: false,
   aiStatus: "AI вимкнено",

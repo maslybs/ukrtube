@@ -11,8 +11,15 @@
   display: none !important;
 }
 
-.ukrtube-filter-help {
+.ukrtube-filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 12px;
+}
+
+.ukrtube-filter-help {
   color: var(--ukr-secondary) !important;
   font-size: 13px;
   line-height: 1.45;
@@ -20,6 +27,30 @@
 
 .ukrtube-filter-help b {
   color: var(--ukr-primary) !important;
+}
+
+.ukrtube-reset-button {
+  flex: 0 0 auto;
+  min-height: 32px;
+  padding: 0 14px;
+  border: 1px solid var(--ukr-border);
+  border-radius: 16px;
+  cursor: pointer;
+  color: var(--ukr-primary) !important;
+  background: transparent;
+  font:
+    600 13px/30px Roboto,
+    Arial,
+    sans-serif;
+}
+
+.ukrtube-reset-button:hover:not(:disabled) {
+  background: var(--ukr-chip-hover);
+}
+
+.ukrtube-reset-button:disabled {
+  cursor: default;
+  opacity: 0.42;
 }
 
 .ukrtube-category-list {
@@ -85,6 +116,13 @@ html[dark] .ukrtube-topic-chip[data-mode="exclude"],
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 16px;
+}
+
+.ukrtube-keyword-help {
+  grid-column: 1 / -1;
+  color: var(--ukr-secondary) !important;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .ukrtube-filter-fields label {
@@ -197,4 +235,10 @@ html[dark] .ukrtube-topic-chip[data-mode="exclude"],
   font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+@media (max-width: 540px) {
+  .ukrtube-filter-header {
+    align-items: flex-start;
+  }
 }

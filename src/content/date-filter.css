@@ -14,14 +14,53 @@
   font-weight: 600;
 }
 
+.ukrtube-date-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ukrtube-date-preset {
+  min-height: 34px;
+  padding: 0 13px;
+  border: 1px solid var(--yt-spec-10-percent-layer, rgba(127, 127, 127, 0.3));
+  border-radius: 17px;
+  cursor: pointer;
+  color: var(--yt-spec-text-primary, #0f0f0f) !important;
+  background: var(--yt-spec-badge-chip-background, rgba(0, 0, 0, 0.06));
+  font:
+    500 13px/32px Roboto,
+    Arial,
+    sans-serif;
+  white-space: nowrap;
+}
+
+.ukrtube-date-preset:hover {
+  background: var(--yt-spec-button-chip-background-hover, rgba(0, 0, 0, 0.1));
+}
+
+.ukrtube-date-preset.is-active {
+  border-color: var(--ukr-blue);
+  color: #fff !important;
+  background: #065fd4;
+}
+
+html[dark] .ukrtube-date-preset.is-active,
+[dark] .ukrtube-date-preset.is-active {
+  color: #0f0f0f !important;
+  background: #3ea6ff;
+}
+
 .ukrtube-date-controls {
   display: grid;
-  grid-template-columns: minmax(190px, 1.4fr) minmax(145px, 1fr) minmax(
-      145px,
-      1fr
-    );
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
   gap: 12px;
   align-items: end;
+  margin-top: 14px;
+}
+
+.ukrtube-date-controls[hidden] {
+  display: none !important;
 }
 
 .ukrtube-date-controls label {
@@ -33,7 +72,6 @@
   font-size: 12px;
 }
 
-.ukrtube-date-controls select,
 .ukrtube-date-controls input[type="date"] {
   box-sizing: border-box;
   width: 100%;
@@ -48,18 +86,11 @@
   font: inherit;
 }
 
-.ukrtube-date-controls select:focus,
 .ukrtube-date-controls input[type="date"]:focus {
   border-color: #065fd4;
 }
 
-.ukrtube-date-controls input[type="date"]:disabled {
-  cursor: not-allowed;
-  opacity: 0.48;
-}
-
 html[dark] .ukrtube-date-title,
-html[dark] .ukrtube-date-controls select,
 html[dark] .ukrtube-date-controls input[type="date"] {
   color: #f1f1f1 !important;
 }

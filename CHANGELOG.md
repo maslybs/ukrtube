@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
 - Moved local API credentials to an ignored override file.
 - Changed the main feed to request a fresh selection from `/random`.
 - Removed the video-count label above the feed while keeping the action buttons on the right.
+- Added one-click filter reset and visible publication-date shortcuts.
+- Clarified that keyword filters search the loaded video metadata locally.
 
 ### Fixed
 

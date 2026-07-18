@@ -168,6 +168,98 @@ test("view counts include zero and use Ukrainian plural forms", () => {
   assert.equal(vm.runInContext("formatViews(0, false)", context), "");
 });
 
+test("local word, date, and reset filters work on loaded videos", () => {
+  const context = vm.createContext({
+    console,
+    location: { href: "https://www.youtube.com/" },
+  });
+  for (const file of [
+    "src/content/state.js",
+    "src/content/platform.js",
+    "src/content/filters.js",
+    "src/content/view.js",
+  ]) {
+    runFile(context, file);
+  }
+
+  const checks = vm.runInContext(
+    `(() => {
+      const video = {
+        id: "dQw4w9WgXcQ",
+        title: "Документальна розповідь",
+        authorName: "Канал знань",
+        description: "Історія української архітектури",
+        category: "Освіта",
+        keywords: ["культура", "археологія"],
+        publishedAt: "2026-01-15T12:00:00Z"
+      };
+
+      state.filters = createDefaultFilters();
+      state.filters.includeKeywords = "ІСТОРІЯ";
+      const findsDescription = passesLocalFilters(video);
+
+      state.filters.includeKeywords = "археологія";
+      const findsKeywords = passesLocalFilters(video);
+
+      state.filters.includeKeywords = "технології";
+      const hidesMissingWord = !passesLocalFilters(video);
+
+      state.filters.includeKeywords = "";
+      state.filters.excludeKeywords = "канал знань";
+      const excludesChannel = !passesLocalFilters(video);
+
+      state.filters = createDefaultFilters();
+      state.filters.datePreset = "custom";
+      state.filters.dateFrom = "2026-01-01";
+      state.filters.dateTo = "2026-01-31";
+      const acceptsDateInRange = passesLocalFilters(video);
+      state.filters.dateFrom = "2026-02-01";
+      const rejectsDateOutsideRange = !passesLocalFilters(video);
+
+      return {
+        findsDescription,
+        findsKeywords,
+        hidesMissingWord,
+        excludesChannel,
+        acceptsDateInRange,
+        rejectsDateOutsideRange
+      };
+    })()`,
+    context,
+  );
+
+  assert.deepEqual(
+    { ...checks },
+    {
+      findsDescription: true,
+      findsKeywords: true,
+      hidesMissingWord: true,
+      excludesChannel: true,
+      acceptsDateInRange: true,
+      rejectsDateOutsideRange: true,
+    },
+  );
+
+  vm.runInContext(
+    `globalThis.resetCalls = 0;
+     globalThis.onFiltersChanged = () => { globalThis.resetCalls += 1; };
+     state.filters = {
+       ...createDefaultFilters(),
+       categoryModes: { news: "include" },
+       includeKeywords: "історія",
+       datePreset: "week"
+     };
+     resetFilters();`,
+    context,
+  );
+  assert.equal(vm.runInContext("activeFilterCount()", context), 0);
+  assert.equal(
+    vm.runInContext("Object.keys(state.filters.categoryModes).length", context),
+    0,
+  );
+  assert.equal(vm.runInContext("resetCalls", context), 1);
+});
+
 test("content enrichment updates every card in a returned batch", async () => {
   let renderCount = 0;
   const context = vm.createContext({ console });

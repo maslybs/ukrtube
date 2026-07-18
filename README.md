@@ -10,6 +10,7 @@ UkrTube is a Manifest V3 Chrome extension that adds a **UkrTube** tab with Ukrai
 - A fresh random selection after page reload or the **Refresh** button.
 - Infinite loading of random batches without duplicates in the current feed.
 - Local topic, keyword, and date filters for the loaded selection.
+- One-click filter reset and visible date-range shortcuts.
 - Video cards with title, channel, thumbnail, duration, views, and publication date.
 - Progressive channel-avatar and view-count recovery from public YouTube video pages.
 - Light and dark themes that follow the current YouTube page.
