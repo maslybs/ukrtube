@@ -40,6 +40,14 @@ const manifest = readJson("manifest.json");
 
 if (manifest) {
   report(
+    manifest.name === "UkrTube",
+    "manifest.json must use the UkrTube name.",
+  );
+  report(
+    manifest.short_name === "UkrTube",
+    "manifest.json must use the UkrTube short name.",
+  );
+  report(
     manifest.manifest_version === 3,
     "manifest.json must use Manifest V3.",
   );
@@ -129,7 +137,16 @@ if (manifest && packageJson) {
     manifest.version === packageJson.version,
     "Version mismatch between manifest.json and package.json.",
   );
+  report(
+    packageJson.name === "ukrtube-extension",
+    "package.json must use the UkrTube package name.",
+  );
 }
+
+report(
+  path.basename(projectRoot) === "ukrtube",
+  "The project directory must be named ukrtube.",
+);
 
 for (const readme of ["README.md", "README.uk.md"]) {
   const file = projectPath(readme);

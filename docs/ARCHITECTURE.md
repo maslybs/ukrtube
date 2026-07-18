@@ -11,7 +11,7 @@ The extension has three isolated runtime areas:
 The normal version 1.3.0 path is:
 
 ```text
-YouTube tab click
+UkrTube tab click
   -> content controller
   -> GET_FILTERED_FEED message
   -> background feed API

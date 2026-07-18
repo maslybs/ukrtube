@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for helping improve Ukrainian YouTube Feed.
+Thank you for helping improve UkrTube.
 
 ## Before you start
 

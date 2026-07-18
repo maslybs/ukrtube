@@ -6,34 +6,34 @@ function createSection() {
 
   section = document.createElement("section");
   section.id = SECTION_ID;
-  section.setAttribute("aria-label", "Українська стрічка відео");
+  section.setAttribute("aria-label", "Стрічка UkrTube");
 
   const toolbar = document.createElement("div");
-  toolbar.className = "ukr-random-toolbar";
+  toolbar.className = "ukrtube-toolbar";
 
   const label = document.createElement("div");
-  label.className = "ukr-random-toolbar-label";
+  label.className = "ukrtube-toolbar-label";
   label.dataset.role = "count-label";
-  label.textContent = "Українська стрічка";
+  label.textContent = "UkrTube";
 
   const actions = document.createElement("div");
-  actions.className = "ukr-random-toolbar-actions";
+  actions.className = "ukrtube-toolbar-actions";
 
   const filterButton = createButton(
-    "ukr-random-action-button",
+    "ukrtube-action-button",
     "Фільтри",
     "Відкрити фільтри",
   );
   filterButton.dataset.role = "filter-button";
   filterButton.addEventListener("click", () => {
     state.filtersOpen = !state.filtersOpen;
-    const panel = section.querySelector(".ukr-random-filter-panel");
+    const panel = section.querySelector(".ukrtube-filter-panel");
     if (panel) panel.hidden = !state.filtersOpen;
     filterButton.classList.toggle("is-active", state.filtersOpen);
   });
 
   const refreshButton = createButton(
-    "ukr-random-action-button is-primary",
+    "ukrtube-action-button is-primary",
     "Оновити",
     "Завантажити нову добірку",
   );
@@ -45,19 +45,19 @@ function createSection() {
 
   const filterPanel = createFilterPanel();
   const grid = document.createElement("div");
-  grid.className = "ukr-random-grid";
+  grid.className = "ukrtube-grid";
   grid.dataset.role = "grid";
 
   const message = document.createElement("div");
-  message.className = "ukr-random-inline-message";
+  message.className = "ukrtube-inline-message";
   message.dataset.role = "message";
   message.hidden = true;
 
   const sentinel = document.createElement("div");
-  sentinel.className = "ukr-random-infinite-sentinel";
+  sentinel.className = "ukrtube-infinite-sentinel";
   sentinel.dataset.role = "infinite-sentinel";
   sentinel.setAttribute("aria-hidden", "true");
-  sentinel.innerHTML = '<span class="ukr-random-infinite-spinner"></span>';
+  sentinel.innerHTML = '<span class="ukrtube-infinite-spinner"></span>';
 
   section.append(toolbar, filterPanel, message, grid, sentinel);
 
@@ -95,11 +95,11 @@ function updateToolbar(visibleCount = null) {
     if (state.pendingMetadata > 0) {
       countLabel.textContent = state.videos.length
         ? `Показано ${state.videos.length}; завантажується наступна порція`
-        : "Завантаження української стрічки…";
+        : "Завантаження стрічки UkrTube…";
     } else {
       countLabel.textContent = state.videos.length
         ? `Показано ${state.videos.length} відео`
-        : "Українська стрічка";
+        : "UkrTube";
     }
   }
 
@@ -123,15 +123,15 @@ function updateToolbar(visibleCount = null) {
 
 function createSkeletonCard() {
   const card = document.createElement("div");
-  card.className = "ukr-random-card ukr-random-skeleton";
+  card.className = "ukrtube-card ukrtube-skeleton";
   card.innerHTML = `
-    <div class="ukr-random-skeleton-thumb"></div>
-    <div class="ukr-random-skeleton-details">
-      <div class="ukr-random-skeleton-avatar"></div>
-      <div class="ukr-random-skeleton-copy">
-        <div class="ukr-random-skeleton-line"></div>
-        <div class="ukr-random-skeleton-line short"></div>
-        <div class="ukr-random-skeleton-line tiny"></div>
+    <div class="ukrtube-skeleton-thumb"></div>
+    <div class="ukrtube-skeleton-details">
+      <div class="ukrtube-skeleton-avatar"></div>
+      <div class="ukrtube-skeleton-copy">
+        <div class="ukrtube-skeleton-line"></div>
+        <div class="ukrtube-skeleton-line short"></div>
+        <div class="ukrtube-skeleton-line tiny"></div>
       </div>
     </div>`;
   return card;
@@ -310,13 +310,13 @@ function formatRelativeDate(value) {
 
 function createAvatar(video) {
   const link = document.createElement("a");
-  link.className = "ukr-random-avatar-link";
+  link.className = "ukrtube-avatar-link";
   link.href = video.authorUrl || "https://www.youtube.com/";
   link.setAttribute("aria-label", video.authorName || "YouTube");
 
   if (video.avatarUrl) {
     const image = document.createElement("img");
-    image.className = "ukr-random-avatar";
+    image.className = "ukrtube-avatar";
     image.src = video.avatarUrl;
     image.alt = "";
     image.loading = "lazy";
@@ -343,19 +343,19 @@ function createAvatar(video) {
 
 function createVideoCard(video) {
   const article = document.createElement("article");
-  article.className = "ukr-random-card";
+  article.className = "ukrtube-card";
   article.dataset.videoId = video.id;
 
   const aiResult = state.aiResults.get(video.id);
   if (aiResult?.action) article.dataset.aiAction = aiResult.action;
 
   const thumbnailLink = document.createElement("a");
-  thumbnailLink.className = "ukr-random-thumbnail-link";
+  thumbnailLink.className = "ukrtube-thumbnail-link";
   thumbnailLink.href = video.watchUrl;
   thumbnailLink.title = video.title;
 
   const image = document.createElement("img");
-  image.className = "ukr-random-thumbnail";
+  image.className = "ukrtube-thumbnail";
   image.src = video.thumbnailUrl;
   image.alt = video.title;
   image.loading = "lazy";
@@ -372,28 +372,28 @@ function createVideoCard(video) {
   if (video.durationText) {
     const duration = document.createElement("span");
     duration.className = video.isLive
-      ? "ukr-random-duration is-live"
-      : "ukr-random-duration";
+      ? "ukrtube-duration is-live"
+      : "ukrtube-duration";
     duration.textContent = video.durationText;
     thumbnailLink.appendChild(duration);
   }
 
   const details = document.createElement("div");
-  details.className = "ukr-random-details";
+  details.className = "ukrtube-details";
   const avatar = createAvatar(video);
   const copy = document.createElement("div");
-  copy.className = "ukr-random-copy";
+  copy.className = "ukrtube-copy";
 
   const titleLink = document.createElement("a");
-  titleLink.className = "ukr-random-title";
+  titleLink.className = "ukrtube-title";
   titleLink.href = video.watchUrl;
   titleLink.title = video.title;
   titleLink.textContent = video.title;
 
   const channelLine = document.createElement("div");
-  channelLine.className = "ukr-random-channel-line";
+  channelLine.className = "ukrtube-channel-line";
   const channel = document.createElement("a");
-  channel.className = "ukr-random-channel";
+  channel.className = "ukrtube-channel";
   channel.href = video.authorUrl || "https://www.youtube.com/";
   channel.textContent = video.authorName || "YouTube";
   channel.title = video.authorName || "YouTube";
@@ -401,14 +401,14 @@ function createVideoCard(video) {
 
   if (video.isVerified) {
     const verified = document.createElement("span");
-    verified.className = "ukr-random-verified";
+    verified.className = "ukrtube-verified";
     verified.title = "Підтверджений канал";
     verified.textContent = "✓";
     channelLine.appendChild(verified);
   }
 
   const metadata = document.createElement("div");
-  metadata.className = "ukr-random-metadata";
+  metadata.className = "ukrtube-metadata";
   const relativeDate = formatRelativeDate(video.publishedAt);
   const calendarDate = formatCalendarDate(video.publishedAt);
   const publishedLabel =
@@ -422,7 +422,7 @@ function createVideoCard(video) {
 
   if (state.filters.aiEnabled && aiResult) {
     const aiBadge = document.createElement("span");
-    aiBadge.className = `ukr-random-ai-badge is-${aiResult.action}`;
+    aiBadge.className = `ukrtube-ai-badge is-${aiResult.action}`;
     aiBadge.textContent = aiResult.action === "lower" ? "AI: нижче" : "AI";
     aiBadge.title = aiResult.reason || "Оцінено локальним AI";
     metadata.append(" ", aiBadge);
@@ -430,7 +430,7 @@ function createVideoCard(video) {
 
   copy.append(titleLink, channelLine, metadata);
 
-  const menu = createButton("ukr-random-menu", "⋮", "Скопіювати посилання");
+  const menu = createButton("ukrtube-menu", "⋮", "Скопіювати посилання");
   menu.addEventListener("click", () => {
     navigator.clipboard?.writeText(video.watchUrl).catch(() => {});
     menu.textContent = "✓";
@@ -477,11 +477,11 @@ function renderProgressiveVideo(video) {
     return;
   }
 
-  grid.querySelector(".ukr-random-skeleton")?.remove();
+  grid.querySelector(".ukrtube-skeleton")?.remove();
 
   if (video && passesLocalFilters(video)) {
     const card = createVideoCard(video);
-    const firstSkeleton = grid.querySelector(".ukr-random-skeleton");
+    const firstSkeleton = grid.querySelector(".ukrtube-skeleton");
     if (firstSkeleton) grid.insertBefore(card, firstSkeleton);
     else grid.appendChild(card);
   }

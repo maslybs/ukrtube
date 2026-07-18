@@ -42,7 +42,7 @@ async function detectLanguage(text) {
       confidence: Number(best?.confidence || 0),
     };
   } catch (error) {
-    console.warn("[MyYT AI] Language detection failed", error);
+    console.warn("[UkrTube AI] Language detection failed", error);
     return { code: "und", confidence: 0 };
   }
 }
@@ -77,7 +77,7 @@ async function ensureTranslator(sourceLanguage, targetLanguage = "en") {
   } catch (error) {
     unavailableTranslators.add(key);
     console.info(
-      `[MyYT AI] Translator ${key} unavailable: ${error?.name || "unknown error"}`,
+      `[UkrTube AI] Translator ${key} unavailable: ${error?.name || "unknown error"}`,
     );
     return null;
   }
@@ -103,7 +103,7 @@ async function translateToEnglish(text, detected = null) {
   try {
     return await translator.translate(normalized);
   } catch (error) {
-    console.warn("[MyYT AI] Translation failed", error);
+    console.warn("[UkrTube AI] Translation failed", error);
     return normalized;
   }
 }

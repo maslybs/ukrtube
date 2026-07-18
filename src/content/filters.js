@@ -61,19 +61,19 @@ function cycleCategory(categoryId) {
 
 function createFilterPanel() {
   const panel = document.createElement("div");
-  panel.className = "ukr-random-filter-panel";
+  panel.className = "ukrtube-filter-panel";
   panel.hidden = !state.filtersOpen;
 
   const help = document.createElement("div");
-  help.className = "ukr-random-filter-help";
+  help.className = "ukrtube-filter-help";
   help.innerHTML =
     "Натискай тему: <b>показувати</b> → <b>не показувати</b> → нейтрально.";
   panel.appendChild(help);
 
   const categories = document.createElement("div");
-  categories.className = "ukr-random-category-list";
+  categories.className = "ukrtube-category-list";
   for (const category of CATEGORIES) {
-    const chip = createButton("ukr-random-topic-chip", category.label);
+    const chip = createButton("ukrtube-topic-chip", category.label);
     chip.dataset.categoryId = category.id;
     chip.dataset.mode = categoryMode(category.id);
     chip.title = "Нейтрально → показувати → не показувати";
@@ -83,7 +83,7 @@ function createFilterPanel() {
   panel.appendChild(categories);
 
   const textGrid = document.createElement("div");
-  textGrid.className = "ukr-random-filter-fields";
+  textGrid.className = "ukrtube-filter-fields";
 
   const includeLabel = document.createElement("label");
   includeLabel.innerHTML = "<span>Показувати, якщо є слова</span>";
@@ -112,14 +112,14 @@ function createFilterPanel() {
   panel.appendChild(textGrid);
 
   const dateBox = document.createElement("div");
-  dateBox.className = "ukr-random-date-filter";
+  dateBox.className = "ukrtube-date-filter";
 
   const dateTitle = document.createElement("div");
-  dateTitle.className = "ukr-random-date-title";
+  dateTitle.className = "ukrtube-date-title";
   dateTitle.textContent = "Дата публікації";
 
   const dateControls = document.createElement("div");
-  dateControls.className = "ukr-random-date-controls";
+  dateControls.className = "ukrtube-date-controls";
 
   const presetLabel = document.createElement("label");
   presetLabel.innerHTML = "<span>Період</span>";
@@ -183,23 +183,23 @@ function createFilterPanel() {
 
   if (SHOW_AI_CONTROLS) {
     const aiBox = document.createElement("div");
-    aiBox.className = "ukr-random-ai-box";
+    aiBox.className = "ukrtube-ai-box";
 
     const aiTop = document.createElement("div");
-    aiTop.className = "ukr-random-ai-top";
+    aiTop.className = "ukrtube-ai-top";
     const aiLabel = document.createElement("label");
-    aiLabel.className = "ukr-random-switch-label";
+    aiLabel.className = "ukrtube-switch-label";
     const aiToggle = document.createElement("input");
     aiToggle.type = "checkbox";
     aiToggle.checked = Boolean(state.filters.aiEnabled);
     const aiSwitch = document.createElement("span");
-    aiSwitch.className = "ukr-random-switch";
+    aiSwitch.className = "ukrtube-switch";
     const aiText = document.createElement("span");
     aiText.textContent = "Локальний AI-фільтр";
     aiLabel.append(aiToggle, aiSwitch, aiText);
 
     const aiStatus = document.createElement("span");
-    aiStatus.className = "ukr-random-ai-status";
+    aiStatus.className = "ukrtube-ai-status";
     aiStatus.dataset.role = "ai-status";
     aiStatus.textContent = state.aiStatus;
     aiTop.append(aiLabel, aiStatus);

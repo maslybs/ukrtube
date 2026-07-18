@@ -147,6 +147,7 @@ test("background service worker loads every module and registers messaging", asy
 
 test("ordered content modules share one isolated runtime", async () => {
   const listeners = new Map();
+  let migratedSettings = null;
   const documentElement = {
     hasAttribute: () => false,
   };
@@ -191,8 +192,15 @@ test("ordered content modules share one isolated runtime", async () => {
       },
       storage: {
         sync: {
-          get: async () => ({}),
-          set: async () => undefined,
+          get: async () => ({
+            ukrainianFeedFilters: {
+              categoryModes: { news: "include" },
+              includeKeywords: "історія",
+            },
+          }),
+          set: async (value) => {
+            migratedSettings = value;
+          },
         },
       },
     },
@@ -215,6 +223,11 @@ test("ordered content modules share one isolated runtime", async () => {
   await new Promise((resolve) => setImmediate(resolve));
 
   assert.equal(vm.runInContext("state.initialized", context), true);
+  assert.equal(
+    vm.runInContext("state.filters.includeKeywords", context),
+    "історія",
+  );
+  assert.equal(migratedSettings.ukrtubeFeedFilters.includeKeywords, "історія");
   assert.equal(
     vm.runInContext(
       "splitTerms(' Історія, історія; Наука ').join('|')",

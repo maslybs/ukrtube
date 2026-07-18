@@ -73,8 +73,11 @@ function sendMessage(message) {
 
 async function loadStoredFilters() {
   try {
-    const stored = await chrome.storage.sync.get(SETTINGS_KEY);
-    const value = stored?.[SETTINGS_KEY] || {};
+    const stored = await chrome.storage.sync.get([
+      SETTINGS_KEY,
+      LEGACY_SETTINGS_KEY,
+    ]);
+    const value = stored?.[SETTINGS_KEY] || stored?.[LEGACY_SETTINGS_KEY] || {};
     state.filters = {
       ...DEFAULT_FILTERS,
       ...value,
@@ -84,6 +87,12 @@ async function loadStoredFilters() {
           ? { ...value.categoryModes }
           : {},
     };
+
+    if (!stored?.[SETTINGS_KEY] && stored?.[LEGACY_SETTINGS_KEY]) {
+      await chrome.storage.sync
+        .set({ [SETTINGS_KEY]: state.filters })
+        .catch(() => {});
+    }
   } catch {
     state.filters = { ...DEFAULT_FILTERS, categoryModes: {} };
   }
@@ -137,8 +146,8 @@ function setChipActive(active) {
 
 function rememberAndHide(element) {
   if (!element) return;
-  if (!element.dataset.ukrRandomOriginalDisplay) {
-    element.dataset.ukrRandomOriginalDisplay =
+  if (!element.dataset.ukrtubeOriginalDisplay) {
+    element.dataset.ukrtubeOriginalDisplay =
       element.style.display || "__empty__";
   }
   element.style.display = "none";
@@ -159,13 +168,11 @@ function hideOriginalFeed() {
 }
 
 function restoreOriginalFeed() {
-  const hidden = document.querySelectorAll(
-    "[data-ukr-random-original-display]",
-  );
+  const hidden = document.querySelectorAll("[data-ukrtube-original-display]");
   for (const element of hidden) {
-    const previous = element.dataset.ukrRandomOriginalDisplay;
+    const previous = element.dataset.ukrtubeOriginalDisplay;
     element.style.display = previous === "__empty__" ? "" : previous;
-    delete element.dataset.ukrRandomOriginalDisplay;
+    delete element.dataset.ukrtubeOriginalDisplay;
   }
 }
 

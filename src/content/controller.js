@@ -90,10 +90,10 @@ function createChip() {
   const button = document.createElement("button");
   button.id = CHIP_ID;
   button.type = "button";
-  button.className = "ukr-random-chip";
+  button.className = "ukrtube-chip";
   button.setAttribute("role", "tab");
   button.setAttribute("aria-selected", "false");
-  button.textContent = "Українські";
+  button.textContent = "UkrTube";
   button.addEventListener("click", (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -104,8 +104,8 @@ function createChip() {
 }
 
 function attachNativeChipHandler(container) {
-  if (container.dataset.ukrRandomListenerAttached === "1") return;
-  container.dataset.ukrRandomListenerAttached = "1";
+  if (container.dataset.ukrtubeListenerAttached === "1") return;
+  container.dataset.ukrtubeListenerAttached = "1";
   container.addEventListener(
     "click",
     (event) => {

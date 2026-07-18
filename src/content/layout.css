@@ -1,4 +1,4 @@
-#ukr-random-youtube-section {
+#ukrtube-section {
   --ukr-primary: var(--yt-spec-text-primary, #0f0f0f);
   --ukr-secondary: var(--yt-spec-text-secondary, #606060);
   --ukr-surface: var(--yt-spec-general-background-a, #fff);
@@ -19,8 +19,8 @@
   font-family: Roboto, Arial, sans-serif;
 }
 
-html[dark] #ukr-random-youtube-section,
-[dark] #ukr-random-youtube-section {
+html[dark] #ukrtube-section,
+[dark] #ukrtube-section {
   --ukr-primary: #f1f1f1;
   --ukr-secondary: #aaaaaa;
   --ukr-surface: #0f0f0f;
@@ -32,7 +32,7 @@ html[dark] #ukr-random-youtube-section,
   --ukr-red: #ff6b6b;
 }
 
-.ukr-random-toolbar {
+.ukrtube-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -40,14 +40,14 @@ html[dark] #ukr-random-youtube-section,
   margin-bottom: 16px;
 }
 
-.ukr-random-toolbar-label {
+.ukrtube-toolbar-label {
   color: var(--ukr-primary) !important;
   font-size: 16px;
   font-weight: 600;
   line-height: 1.4;
 }
 
-.ukr-random-toolbar-actions {
+.ukrtube-toolbar-actions {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -55,7 +55,7 @@ html[dark] #ukr-random-youtube-section,
   justify-content: flex-end;
 }
 
-.ukr-random-action-button {
+.ukrtube-action-button {
   appearance: none;
   border: 0;
   border-radius: 18px;
@@ -71,28 +71,28 @@ html[dark] #ukr-random-youtube-section,
   white-space: nowrap;
 }
 
-.ukr-random-action-button:hover:not(:disabled) {
+.ukrtube-action-button:hover:not(:disabled) {
   background: var(--ukr-chip-hover);
 }
 
-.ukr-random-action-button.is-primary {
+.ukrtube-action-button.is-primary {
   color: #fff !important;
   background: #065fd4;
 }
 
-html[dark] .ukr-random-action-button.is-primary,
-[dark] .ukr-random-action-button.is-primary {
+html[dark] .ukrtube-action-button.is-primary,
+[dark] .ukrtube-action-button.is-primary {
   color: #0f0f0f !important;
   background: #3ea6ff;
 }
 
-.ukr-random-action-button.has-filters,
-.ukr-random-action-button.is-active {
+.ukrtube-action-button.has-filters,
+.ukrtube-action-button.is-active {
   outline: 2px solid var(--ukr-blue);
   outline-offset: -2px;
 }
 
-.ukr-random-action-button:disabled {
+.ukrtube-action-button:disabled {
   cursor: default;
   opacity: 0.55;
 }

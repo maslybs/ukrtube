@@ -1,6 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "YouTube — українська стрічка",
+  "name": "UkrTube",
+  "short_name": "UkrTube",
   "version": "1.3.0",
   "description": "Додає нескінченну українську стрічку YouTube із серверними фільтрами за датою, темами та ключовими словами.",
   "permissions": ["storage", "offscreen"],

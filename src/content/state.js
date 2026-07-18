@@ -1,10 +1,11 @@
 "use strict";
 
 // Configuration and runtime state.
-const CHIP_ID = "ukr-random-youtube-chip";
-const SECTION_ID = "ukr-random-youtube-section";
+const CHIP_ID = "ukrtube-chip";
+const SECTION_ID = "ukrtube-section";
 const PAGE_SIZE = 30;
-const SETTINGS_KEY = "ukrainianFeedFilters";
+const SETTINGS_KEY = "ukrtubeFeedFilters";
+const LEGACY_SETTINGS_KEY = "ukrainianFeedFilters";
 const SHOW_AI_CONTROLS = false;
 
 const CATEGORIES = [

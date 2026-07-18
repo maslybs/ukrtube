@@ -1,5 +1,5 @@
 /* Stable theme layer: YouTube's internal CSS variables can differ between layouts. */
-#ukr-random-youtube-section[data-theme="light"] {
+#ukrtube-section[data-theme="light"] {
   --ukr-primary: #0f0f0f;
   --ukr-secondary: #606060;
   --ukr-surface: #ffffff;
@@ -12,7 +12,7 @@
   color-scheme: light;
 }
 
-#ukr-random-youtube-section[data-theme="dark"] {
+#ukrtube-section[data-theme="dark"] {
   --ukr-primary: #f1f1f1;
   --ukr-secondary: #aaaaaa;
   --ukr-surface: #0f0f0f;
@@ -25,58 +25,58 @@
   color-scheme: dark;
 }
 
-#ukr-random-youtube-section[data-theme] .ukr-random-filter-panel,
-#ukr-random-youtube-section[data-theme] .ukr-random-inline-message,
-#ukr-random-youtube-section[data-theme] .ukr-random-date-filter {
+#ukrtube-section[data-theme] .ukrtube-filter-panel,
+#ukrtube-section[data-theme] .ukrtube-inline-message,
+#ukrtube-section[data-theme] .ukrtube-date-filter {
   color: var(--ukr-primary) !important;
   background: var(--ukr-surface-raised) !important;
   border-color: var(--ukr-border) !important;
 }
 
-#ukr-random-youtube-section[data-theme] input,
-#ukr-random-youtube-section[data-theme] textarea,
-#ukr-random-youtube-section[data-theme] select {
+#ukrtube-section[data-theme] input,
+#ukrtube-section[data-theme] textarea,
+#ukrtube-section[data-theme] select {
   color: var(--ukr-primary) !important;
   background: var(--ukr-surface) !important;
   border-color: var(--ukr-border) !important;
   -webkit-text-fill-color: var(--ukr-primary) !important;
 }
 
-#ukr-random-youtube-section[data-theme] input::placeholder,
-#ukr-random-youtube-section[data-theme] textarea::placeholder {
+#ukrtube-section[data-theme] input::placeholder,
+#ukrtube-section[data-theme] textarea::placeholder {
   color: var(--ukr-secondary) !important;
   opacity: 0.85;
 }
 
-#ukr-random-youtube-section[data-theme] .ukr-random-date-title,
-#ukr-random-youtube-section[data-theme] .ukr-random-date-controls label {
+#ukrtube-section[data-theme] .ukrtube-date-title,
+#ukrtube-section[data-theme] .ukrtube-date-controls label {
   color: var(--ukr-secondary) !important;
 }
 
-#ukr-random-youtube-section[data-theme] .ukr-random-date-title {
+#ukrtube-section[data-theme] .ukrtube-date-title {
   color: var(--ukr-primary) !important;
 }
 
-.ukr-random-chip[data-theme="light"] {
+.ukrtube-chip[data-theme="light"] {
   color: #0f0f0f !important;
   background: #e5e5e5 !important;
 }
 
-.ukr-random-chip[data-theme="light"].is-active {
+.ukrtube-chip[data-theme="light"].is-active {
   color: #ffffff !important;
   background: #0f0f0f !important;
 }
 
-.ukr-random-chip[data-theme="dark"] {
+.ukrtube-chip[data-theme="dark"] {
   color: #f1f1f1 !important;
   background: #272727 !important;
 }
 
-.ukr-random-chip[data-theme="dark"].is-active {
+.ukrtube-chip[data-theme="dark"].is-active {
   color: #0f0f0f !important;
   background: #f1f1f1 !important;
 }
 
-.ukr-random-ai-box {
+.ukrtube-ai-box {
   display: none !important;
 }

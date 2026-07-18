@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Renamed the extension to UkrTube and aligned all internal identifiers.
 - Split the background worker, content runtime, offscreen AI runtime, and styles into focused modules.
 - Moved local API credentials to an ignored override file.
 

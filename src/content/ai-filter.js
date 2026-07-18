@@ -3,7 +3,7 @@
 function refreshFilterChipStates() {
   const section = document.getElementById(SECTION_ID);
   if (!section) return;
-  for (const chip of section.querySelectorAll(".ukr-random-topic-chip")) {
+  for (const chip of section.querySelectorAll(".ukrtube-topic-chip")) {
     chip.dataset.mode = categoryMode(chip.dataset.categoryId);
   }
 }

@@ -1,4 +1,4 @@
-.ukr-random-inline-message {
+.ukrtube-inline-message {
   margin: 0 0 18px;
   padding: 12px 14px;
   border-radius: 10px;
@@ -8,22 +8,22 @@
   line-height: 1.45;
 }
 
-.ukr-random-inline-message[data-kind="error"] {
+.ukrtube-inline-message[data-kind="error"] {
   border: 1px solid var(--ukr-red);
 }
 
-.ukr-random-grid {
+.ukrtube-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 34px 16px;
 }
 
-.ukr-random-card {
+.ukrtube-card {
   min-width: 0;
   color: var(--ukr-primary) !important;
 }
 
-.ukr-random-thumbnail-link {
+.ukrtube-thumbnail-link {
   position: relative;
   display: block;
   overflow: hidden;
@@ -33,7 +33,7 @@
   text-decoration: none;
 }
 
-.ukr-random-thumbnail {
+.ukrtube-thumbnail {
   display: block;
   width: 100%;
   height: 100%;
@@ -41,11 +41,11 @@
   transition: transform 160ms ease;
 }
 
-.ukr-random-thumbnail-link:hover .ukr-random-thumbnail {
+.ukrtube-thumbnail-link:hover .ukrtube-thumbnail {
   transform: scale(1.015);
 }
 
-.ukr-random-duration {
+.ukrtube-duration {
   position: absolute;
   right: 5px;
   bottom: 5px;
@@ -58,18 +58,18 @@
   line-height: 1.1;
 }
 
-.ukr-random-duration.is-live {
+.ukrtube-duration.is-live {
   background: #cc0000;
 }
 
-.ukr-random-details {
+.ukrtube-details {
   display: grid;
   grid-template-columns: 36px minmax(0, 1fr) 26px;
   gap: 10px;
   padding: 12px 2px 0;
 }
 
-.ukr-random-avatar-link {
+.ukrtube-avatar-link {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,19 +84,19 @@
   font-weight: 600;
 }
 
-.ukr-random-avatar {
+.ukrtube-avatar {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.ukr-random-copy {
+.ukrtube-copy {
   min-width: 0;
 }
 
-.ukr-random-title,
-.ukr-random-title:visited,
-.ukr-random-title:hover {
+.ukrtube-title,
+.ukrtube-title:visited,
+.ukrtube-title:hover {
   display: -webkit-box;
   overflow: hidden;
   margin: 0 0 6px;
@@ -109,16 +109,16 @@
   line-height: 1.35;
 }
 
-.ukr-random-channel-line {
+.ukrtube-channel-line {
   display: flex;
   align-items: center;
   gap: 4px;
   min-width: 0;
 }
 
-.ukr-random-channel,
-.ukr-random-channel:visited,
-.ukr-random-channel:hover {
+.ukrtube-channel,
+.ukrtube-channel:visited,
+.ukrtube-channel:hover {
   overflow: hidden;
   color: var(--ukr-secondary) !important;
   text-decoration: none !important;
@@ -128,7 +128,7 @@
   white-space: nowrap;
 }
 
-.ukr-random-verified {
+.ukrtube-verified {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
@@ -142,7 +142,7 @@
   font-weight: 900;
 }
 
-.ukr-random-metadata {
+.ukrtube-metadata {
   overflow: hidden;
   margin-top: 2px;
   color: var(--ukr-secondary) !important;
@@ -152,7 +152,7 @@
   white-space: nowrap;
 }
 
-.ukr-random-ai-badge {
+.ukrtube-ai-badge {
   display: inline-block;
   margin-left: 5px;
   padding: 1px 5px;
@@ -163,12 +163,12 @@
   vertical-align: 1px;
 }
 
-.ukr-random-ai-badge.is-lower {
+.ukrtube-ai-badge.is-lower {
   color: #7a4d00 !important;
   background: #ffdf9e;
 }
 
-.ukr-random-menu {
+.ukrtube-menu {
   appearance: none;
   align-self: start;
   width: 26px;
@@ -183,54 +183,54 @@
   line-height: 30px;
 }
 
-.ukr-random-menu:hover {
+.ukrtube-menu:hover {
   background: var(--ukr-chip-hover);
 }
 
-.ukr-random-skeleton-thumb,
-.ukr-random-skeleton-avatar,
-.ukr-random-skeleton-line {
+.ukrtube-skeleton-thumb,
+.ukrtube-skeleton-avatar,
+.ukrtube-skeleton-line {
   position: relative;
   overflow: hidden;
   background: var(--ukr-chip);
 }
 
-.ukr-random-skeleton-thumb {
+.ukrtube-skeleton-thumb {
   aspect-ratio: 16 / 9;
   border-radius: 12px;
 }
 
-.ukr-random-skeleton-details {
+.ukrtube-skeleton-details {
   display: grid;
   grid-template-columns: 36px minmax(0, 1fr);
   gap: 10px;
   padding-top: 12px;
 }
 
-.ukr-random-skeleton-avatar {
+.ukrtube-skeleton-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
 }
 
-.ukr-random-skeleton-line {
+.ukrtube-skeleton-line {
   width: 92%;
   height: 14px;
   margin-bottom: 8px;
   border-radius: 4px;
 }
 
-.ukr-random-skeleton-line.short {
+.ukrtube-skeleton-line.short {
   width: 65%;
 }
 
-.ukr-random-skeleton-line.tiny {
+.ukrtube-skeleton-line.tiny {
   width: 45%;
 }
 
-.ukr-random-skeleton-thumb::after,
-.ukr-random-skeleton-avatar::after,
-.ukr-random-skeleton-line::after {
+.ukrtube-skeleton-thumb::after,
+.ukrtube-skeleton-avatar::after,
+.ukrtube-skeleton-line::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -241,54 +241,54 @@
     rgba(255, 255, 255, 0.25),
     transparent
   );
-  animation: ukr-random-shimmer 1.2s infinite;
+  animation: ukrtube-shimmer 1.2s infinite;
 }
 
-@keyframes ukr-random-shimmer {
+@keyframes ukrtube-shimmer {
   100% {
     transform: translateX(100%);
   }
 }
 
 @media (max-width: 1200px) {
-  .ukr-random-grid {
+  .ukrtube-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 860px) {
-  #ukr-random-youtube-section {
+  #ukrtube-section {
     padding-inline: 16px;
   }
-  .ukr-random-toolbar {
+  .ukrtube-toolbar {
     align-items: flex-start;
     flex-direction: column;
   }
-  .ukr-random-toolbar-actions {
+  .ukrtube-toolbar-actions {
     justify-content: flex-start;
   }
-  .ukr-random-filter-fields {
+  .ukrtube-filter-fields {
     grid-template-columns: 1fr;
   }
-  .ukr-random-grid {
+  .ukrtube-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 540px) {
-  .ukr-random-grid {
+  .ukrtube-grid {
     grid-template-columns: 1fr;
   }
-  .ukr-random-ai-top {
+  .ukrtube-ai-top {
     align-items: flex-start;
     flex-direction: column;
   }
-  .ukr-random-ai-status {
+  .ukrtube-ai-status {
     max-width: 100%;
   }
 }
 
-.ukr-random-infinite-sentinel {
+.ukrtube-infinite-sentinel {
   min-height: 96px;
   display: flex;
   align-items: center;
@@ -298,21 +298,21 @@
   pointer-events: none;
 }
 
-.ukr-random-infinite-sentinel.is-loading {
+.ukrtube-infinite-sentinel.is-loading {
   opacity: 1;
 }
 
-.ukr-random-infinite-spinner {
+.ukrtube-infinite-spinner {
   width: 28px;
   height: 28px;
   border: 3px solid
     color-mix(in srgb, var(--yt-spec-text-secondary, #606060) 28%, transparent);
   border-top-color: var(--yt-spec-text-primary, #0f0f0f);
   border-radius: 50%;
-  animation: ukr-random-spin 700ms linear infinite;
+  animation: ukrtube-spin 700ms linear infinite;
 }
 
-@keyframes ukr-random-spin {
+@keyframes ukrtube-spin {
   to {
     transform: rotate(360deg);
   }

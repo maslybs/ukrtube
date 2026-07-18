@@ -1,12 +1,12 @@
-# Ukrainian YouTube Feed
+# UkrTube
 
 [Українська версія](README.uk.md)
 
-A Manifest V3 Chrome extension that adds an **Ukrainian** tab to the YouTube home page. The tab displays an infinite feed backed by a server-side catalogue and lets the user filter videos by topic, keywords, and publication date.
+UkrTube is a Manifest V3 Chrome extension that adds a **UkrTube** tab with Ukrainian videos to the YouTube home page. The tab displays an infinite feed backed by a server-side catalogue and lets the user filter videos by topic, keywords, and publication date.
 
 ## Features
 
-- A native-looking **Ukrainian** tab on the YouTube home page.
+- A native-looking **UkrTube** tab on the YouTube home page.
 - Cursor-based infinite scrolling without duplicates between pages.
 - Server-side topic, keyword, and date filters across the indexed catalogue.
 - Video cards with title, channel, thumbnail, duration, views, and publication date.
@@ -30,7 +30,7 @@ A Manifest V3 Chrome extension that adds an **Ukrainian** tab to the YouTube hom
 4. Open `chrome://extensions`.
 5. Enable **Developer mode**.
 6. Select **Load unpacked** and choose the repository directory.
-7. Open the YouTube home page and select the **Ukrainian** tab.
+7. Open the YouTube home page and select the **UkrTube** tab.
 
 After a source change, use **Reload** on `chrome://extensions`, then refresh YouTube with `Ctrl + Shift + R` or `Cmd + Shift + R`.
 

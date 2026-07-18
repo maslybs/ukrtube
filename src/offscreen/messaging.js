@@ -68,9 +68,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       runtimeState.lastError = asErrorMessage(error);
 
       if (expectedStop) {
-        console.warn("[MyYT AI]", runtimeState.lastError);
+        console.warn("[UkrTube AI]", runtimeState.lastError);
       } else {
-        console.error("[MyYT AI]", error);
+        console.error("[UkrTube AI]", error);
       }
 
       sendResponse({
