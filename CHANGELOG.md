@@ -17,6 +17,10 @@ All notable changes to this project will be documented in this file.
 - Split the background worker, content runtime, offscreen AI runtime, and styles into focused modules.
 - Moved local API credentials to an ignored override file.
 
+### Fixed
+
+- Recover channel avatars and view counts when the feed catalogue returns empty placeholder values.
+
 ### Preserved
 
 - Existing feed messages and server query parameters.

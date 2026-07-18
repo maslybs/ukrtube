@@ -13,6 +13,7 @@ function onFiltersChanged() {
   saveFilters();
   refreshFilterChipStates();
   state.loadGeneration += 1;
+  state.metadataGeneration += 1;
   state.loading = false;
   state.pendingMetadata = 0;
   state.hasMore = false;

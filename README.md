@@ -10,6 +10,7 @@ UkrTube is a Manifest V3 Chrome extension that adds a **UkrTube** tab with Ukrai
 - Cursor-based infinite scrolling without duplicates between pages.
 - Server-side topic, keyword, and date filters across the indexed catalogue.
 - Video cards with title, channel, thumbnail, duration, views, and publication date.
+- Progressive channel-avatar and view-count recovery when the feed catalogue has not stored them yet.
 - Light and dark themes that follow the current YouTube page.
 - Filter settings stored with Chrome Sync.
 - An experimental local Chrome AI runtime kept behind a disabled feature flag.

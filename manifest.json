@@ -21,6 +21,7 @@
         "src/content/platform.js",
         "src/content/filters.js",
         "src/content/view.js",
+        "src/content/metadata-enrichment.js",
         "src/content/ai-filter.js",
         "src/content/controller.js"
       ],

@@ -227,6 +227,7 @@ function deactivate() {
   state.loading = false;
   state.aiGeneration += 1;
   state.loadGeneration += 1;
+  state.metadataGeneration += 1;
   setChipActive(false);
   removeCustomSection();
   restoreOriginalFeed();

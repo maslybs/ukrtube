@@ -41,6 +41,7 @@ async function fetchVideoMetadata(id) {
     thumbnailUrl: `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`,
     durationText: "",
     viewCount: 0,
+    viewCountAvailable: false,
     publishedAt: "",
     publishedText: "",
     isLive: false,
@@ -112,6 +113,14 @@ async function fetchVideoMetadata(id) {
       fallback.thumbnailUrl,
     );
     const lengthSeconds = Number(details.lengthSeconds || 0);
+    const rawViewCount = details.viewCount;
+    const parsedViewCount = Number(rawViewCount);
+    const viewCountAvailable =
+      rawViewCount !== undefined &&
+      rawViewCount !== null &&
+      rawViewCount !== "" &&
+      Number.isFinite(parsedViewCount) &&
+      parsedViewCount >= 0;
     const isLive = Boolean(
       details.isLiveContent || microformat.liveBroadcastDetails?.isLiveNow,
     );
@@ -141,7 +150,8 @@ async function fetchVideoMetadata(id) {
       avatarUrl,
       thumbnailUrl,
       durationText: isLive ? "НАЖИВО" : formatDuration(lengthSeconds),
-      viewCount: Number(details.viewCount || 0),
+      viewCount: viewCountAvailable ? parsedViewCount : 0,
+      viewCountAvailable,
       publishedAt,
       publishedText,
       isLive,

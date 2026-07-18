@@ -257,16 +257,26 @@ function filteredVideos() {
   return [...state.videos];
 }
 
-function formatViews(viewCount) {
-  const count = Number(viewCount || 0);
-  if (!count) return "";
+function formatViews(viewCount, available = Number(viewCount) > 0) {
+  const count = Math.max(0, Number(viewCount) || 0);
+  if (!available) return "";
+
+  let noun = "переглядів";
+  try {
+    const plural = new Intl.PluralRules("uk-UA").select(count);
+    if (plural === "one") noun = "перегляд";
+    else if (plural === "few") noun = "перегляди";
+  } catch {
+    // Use the generic plural form when plural rules are unavailable.
+  }
+
   try {
     return `${new Intl.NumberFormat("uk-UA", {
       notation: "compact",
       maximumFractionDigits: 1,
-    }).format(count)} переглядів`;
+    }).format(count)} ${noun}`;
   } catch {
-    return `${count.toLocaleString("uk-UA")} переглядів`;
+    return `${count.toLocaleString("uk-UA")} ${noun}`;
   }
 }
 
@@ -416,7 +426,13 @@ function createVideoCard(video) {
       ? `≈ ${String(video.publishedText || relativeDate || calendarDate).trim()}`
       : [calendarDate, relativeDate].filter(Boolean).join(" • ");
   metadata.textContent =
-    [formatViews(video.viewCount), publishedLabel]
+    [
+      formatViews(
+        video.viewCount,
+        video.viewCountAvailable === true || Number(video.viewCount) > 0,
+      ),
+      publishedLabel,
+    ]
       .filter(Boolean)
       .join(" • ") || "Дата недоступна";
 

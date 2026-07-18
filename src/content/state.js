@@ -254,6 +254,7 @@ const state = {
   aiStatus: "AI вимкнено",
   aiGeneration: 0,
   loadGeneration: 0,
+  metadataGeneration: 0,
   initialized: false,
 };
 

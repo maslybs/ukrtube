@@ -14,6 +14,7 @@ async function loadVideos({ replace }) {
     state.cursor = null;
     state.hasMore = true;
     state.aiGeneration += 1;
+    state.metadataGeneration += 1;
   }
 
   state.pendingMetadata = replace ? 12 : 4;
@@ -45,6 +46,7 @@ async function loadVideos({ replace }) {
     state.hasMore = Boolean(response.hasMore && response.nextCursor);
     state.pendingMetadata = 0;
     renderVideos();
+    void enrichVideoCards(videos, state.metadataGeneration);
 
     if (!videos.length) {
       showMessage(

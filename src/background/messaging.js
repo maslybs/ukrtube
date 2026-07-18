@@ -23,6 +23,12 @@ async function handleMessage(message) {
       return { ok: true, video: await fetchVideoMetadata(id) };
     }
 
+    case "ENRICH_VIDEO_METADATA":
+      return {
+        ok: true,
+        items: await enrichVideoMetadata(message.ids),
+      };
+
     case "GET_RANDOM_VIDEOS": {
       const ids = await getRandomVideoIds(message.count);
       return {

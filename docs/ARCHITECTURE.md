@@ -25,6 +25,7 @@ UkrTube tab click
 - `platform.js`: YouTube page detection, theme detection, Chrome storage, messaging, and native-feed visibility.
 - `filters.js`: filter state and filter-panel controls.
 - `view.js`: section layout, messages, skeletons, metadata formatting, and video cards.
+- `metadata-enrichment.js`: progressive avatar and view-count updates for loaded cards.
 - `ai-filter.js`: delayed filter reloads and the hidden local AI classification flow.
 - `controller.js`: feed requests, activation, infinite scrolling, and single-page navigation.
 
@@ -35,6 +36,7 @@ These files are classic content scripts because Manifest V3 does not load declar
 - `service-worker.js`: configuration loading and module startup order.
 - `utils.js`: input normalization and YouTube response parsing helpers.
 - `metadata.js`: legacy per-video metadata loading.
+- `metadata-cache.js`: cached avatar and view-count enrichment from video pages.
 - `feed-api.js`: random IDs and filtered feed requests.
 - `offscreen-bridge.js`: offscreen document lifecycle.
 - `messaging.js`: public runtime message contract.
