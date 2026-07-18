@@ -25,7 +25,6 @@ UkrTube is a Manifest V3 Chrome extension that adds a **UkrTube** tab with Ukrai
 - Google Chrome or another Chromium browser with Manifest V3 support.
 - Access to the configured feed service.
 - A valid API token for that service.
-- Node.js 20 or newer only when running the development checks.
 
 ## Install for local development
 
@@ -68,39 +67,11 @@ The order of JavaScript files in `manifest.json` is intentional. Chrome content 
 
 See [Architecture](docs/ARCHITECTURE.md) for the module responsibilities and runtime flow.
 
-## Development
-
-Install the formatting dependency once:
-
-```bash
-npm install
-```
-
-Run all structural and runtime checks:
-
-```bash
-npm run check
-```
-
-Check formatting or apply it:
-
-```bash
-npm run format:check
-npm run format
-```
-
 ## Permissions
 
 - `storage` stores filter settings in Chrome Sync and the API key locally.
-- `offscreen` hosts the optional local AI runtime.
-- Host access to YouTube reads public video pages and thumbnails.
-- Host access to the feed service loads complete filtered video pages.
 
 The extension does not inject scripts into arbitrary websites. Its content scripts run only on `https://www.youtube.com/*`.
-
-## Experimental local AI
-
-The local AI controls are intentionally hidden in version 1.3.0 (`SHOW_AI_CONTROLS` is `false`). The offscreen runtime remains in the repository for future experiments and is not started during the normal feed flow.
 
 ## Contributing and security
 
