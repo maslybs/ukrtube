@@ -1,0 +1,43 @@
+.ukr-random-chip {
+  appearance: none;
+  border: 0;
+  border-radius: 8px;
+  min-height: 32px;
+  padding: 0 13px;
+  margin: 0 6px;
+  flex: 0 0 auto;
+  cursor: pointer;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 32px;
+  color: var(--yt-spec-text-primary, #0f0f0f);
+  background: var(--yt-spec-badge-chip-background, rgba(0, 0, 0, 0.05));
+  white-space: nowrap;
+}
+
+.ukr-random-chip:hover {
+  background: var(--yt-spec-button-chip-background-hover, rgba(0, 0, 0, 0.1));
+}
+
+.ukr-random-chip.is-active {
+  color: var(--yt-spec-text-primary-inverse, #fff);
+  background: var(--yt-spec-text-primary, #0f0f0f);
+}
+
+html[dark] .ukr-random-chip,
+[dark] .ukr-random-chip {
+  color: #f1f1f1;
+  background: #272727;
+}
+
+html[dark] .ukr-random-chip:hover,
+[dark] .ukr-random-chip:hover {
+  background: #3f3f3f;
+}
+
+html[dark] .ukr-random-chip.is-active,
+[dark] .ukr-random-chip.is-active {
+  color: #0f0f0f;
+  background: #f1f1f1;
+}

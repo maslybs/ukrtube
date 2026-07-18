@@ -1,0 +1,98 @@
+#ukr-random-youtube-section {
+  --ukr-primary: var(--yt-spec-text-primary, #0f0f0f);
+  --ukr-secondary: var(--yt-spec-text-secondary, #606060);
+  --ukr-surface: var(--yt-spec-general-background-a, #fff);
+  --ukr-surface-raised: var(--yt-spec-brand-background-solid, #f2f2f2);
+  --ukr-chip: var(--yt-spec-badge-chip-background, rgba(0, 0, 0, 0.06));
+  --ukr-chip-hover: var(
+    --yt-spec-button-chip-background-hover,
+    rgba(0, 0, 0, 0.1)
+  );
+  --ukr-border: rgba(0, 0, 0, 0.12);
+  --ukr-blue: #065fd4;
+  --ukr-red: #cc0000;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 18px 24px 48px;
+  color: var(--ukr-primary) !important;
+  background: transparent;
+  font-family: Roboto, Arial, sans-serif;
+}
+
+html[dark] #ukr-random-youtube-section,
+[dark] #ukr-random-youtube-section {
+  --ukr-primary: #f1f1f1;
+  --ukr-secondary: #aaaaaa;
+  --ukr-surface: #0f0f0f;
+  --ukr-surface-raised: #212121;
+  --ukr-chip: #272727;
+  --ukr-chip-hover: #3f3f3f;
+  --ukr-border: rgba(255, 255, 255, 0.16);
+  --ukr-blue: #3ea6ff;
+  --ukr-red: #ff6b6b;
+}
+
+.ukr-random-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.ukr-random-toolbar-label {
+  color: var(--ukr-primary) !important;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.ukr-random-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.ukr-random-action-button {
+  appearance: none;
+  border: 0;
+  border-radius: 18px;
+  min-height: 36px;
+  padding: 0 16px;
+  cursor: pointer;
+  color: var(--ukr-primary) !important;
+  background: var(--ukr-chip);
+  font:
+    600 14px/36px Roboto,
+    Arial,
+    sans-serif;
+  white-space: nowrap;
+}
+
+.ukr-random-action-button:hover:not(:disabled) {
+  background: var(--ukr-chip-hover);
+}
+
+.ukr-random-action-button.is-primary {
+  color: #fff !important;
+  background: #065fd4;
+}
+
+html[dark] .ukr-random-action-button.is-primary,
+[dark] .ukr-random-action-button.is-primary {
+  color: #0f0f0f !important;
+  background: #3ea6ff;
+}
+
+.ukr-random-action-button.has-filters,
+.ukr-random-action-button.is-active {
+  outline: 2px solid var(--ukr-blue);
+  outline-offset: -2px;
+}
+
+.ukr-random-action-button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}

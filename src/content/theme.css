@@ -1,0 +1,82 @@
+/* Stable theme layer: YouTube's internal CSS variables can differ between layouts. */
+#ukr-random-youtube-section[data-theme="light"] {
+  --ukr-primary: #0f0f0f;
+  --ukr-secondary: #606060;
+  --ukr-surface: #ffffff;
+  --ukr-surface-raised: #f2f2f2;
+  --ukr-chip: #e5e5e5;
+  --ukr-chip-hover: #d9d9d9;
+  --ukr-border: rgba(0, 0, 0, 0.16);
+  --ukr-blue: #065fd4;
+  --ukr-red: #b3261e;
+  color-scheme: light;
+}
+
+#ukr-random-youtube-section[data-theme="dark"] {
+  --ukr-primary: #f1f1f1;
+  --ukr-secondary: #aaaaaa;
+  --ukr-surface: #0f0f0f;
+  --ukr-surface-raised: #212121;
+  --ukr-chip: #272727;
+  --ukr-chip-hover: #3f3f3f;
+  --ukr-border: rgba(255, 255, 255, 0.18);
+  --ukr-blue: #3ea6ff;
+  --ukr-red: #ff8a80;
+  color-scheme: dark;
+}
+
+#ukr-random-youtube-section[data-theme] .ukr-random-filter-panel,
+#ukr-random-youtube-section[data-theme] .ukr-random-inline-message,
+#ukr-random-youtube-section[data-theme] .ukr-random-date-filter {
+  color: var(--ukr-primary) !important;
+  background: var(--ukr-surface-raised) !important;
+  border-color: var(--ukr-border) !important;
+}
+
+#ukr-random-youtube-section[data-theme] input,
+#ukr-random-youtube-section[data-theme] textarea,
+#ukr-random-youtube-section[data-theme] select {
+  color: var(--ukr-primary) !important;
+  background: var(--ukr-surface) !important;
+  border-color: var(--ukr-border) !important;
+  -webkit-text-fill-color: var(--ukr-primary) !important;
+}
+
+#ukr-random-youtube-section[data-theme] input::placeholder,
+#ukr-random-youtube-section[data-theme] textarea::placeholder {
+  color: var(--ukr-secondary) !important;
+  opacity: 0.85;
+}
+
+#ukr-random-youtube-section[data-theme] .ukr-random-date-title,
+#ukr-random-youtube-section[data-theme] .ukr-random-date-controls label {
+  color: var(--ukr-secondary) !important;
+}
+
+#ukr-random-youtube-section[data-theme] .ukr-random-date-title {
+  color: var(--ukr-primary) !important;
+}
+
+.ukr-random-chip[data-theme="light"] {
+  color: #0f0f0f !important;
+  background: #e5e5e5 !important;
+}
+
+.ukr-random-chip[data-theme="light"].is-active {
+  color: #ffffff !important;
+  background: #0f0f0f !important;
+}
+
+.ukr-random-chip[data-theme="dark"] {
+  color: #f1f1f1 !important;
+  background: #272727 !important;
+}
+
+.ukr-random-chip[data-theme="dark"].is-active {
+  color: #0f0f0f !important;
+  background: #f1f1f1 !important;
+}
+
+.ukr-random-ai-box {
+  display: none !important;
+}

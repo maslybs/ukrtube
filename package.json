@@ -1,0 +1,18 @@
+{
+  "name": "youtube-ukrainian-feed-extension",
+  "version": "1.3.0",
+  "private": true,
+  "description": "A Manifest V3 Chrome extension that adds a filtered Ukrainian video feed to YouTube.",
+  "scripts": {
+    "check": "node scripts/check-project.mjs && node --test tests/*.test.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
